@@ -1,0 +1,32 @@
+{% extends 'template.html' %}
+
+{% block content %} 
+<div style="height: 100%; width:100%;">
+    <center>
+        <h1>Pieslēgties</h1>
+        <form>
+            <input class="formInput" type="text" placeholder="Lietotājvārds"> <br>
+            <input class="formInput" type="password" placeholder="Parole"> <br>
+            <input class="formButton" type="button" value="Pieslēgties">
+        </form>
+        Neesi vēl reģistrējies?
+        reģistrējies <a href="{{url_for('auth.register')}}">šeit</a>!
+    </center>
+</div>
+
+<style>
+    .formInput 
+    {
+        margin-bottom: 5px;
+        width: 50%;
+        height:25px;
+    }
+    .formButton
+    {
+        margin-bottom: 5px;
+        width: 20%;
+        height:25px;
+        text-align: center;   
+    }
+</style>
+{% endblock %}

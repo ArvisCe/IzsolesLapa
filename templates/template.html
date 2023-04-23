@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">
+        <h1>
+            Izsoles.lv
+            <a href="{{url_for('home.index')}}">
+                <button class="navbutton">PRECES</button>
+            </a>
+            <a href="{{url_for('auth.login')}}">
+                <button class="navbutton">PIESLĒGTIES</button>
+            </a>
+            <a href="{{url_for('auth.register')}}">
+                <button class="navbutton">REĢISTRĒTIES</button>
+            </a>
+        </h1>
+    </div>
+    <div class="content">
+        {% block content %} {% endblock %}
+    </div>
+</body>
+</html>
+
+
+<style>
+
+    body 
+    {
+        padding: 0px;
+        margin: 0px;
+    }
+
+    a
+    {
+        text-decoration: none;
+    }
+
+    .navigation
+    {
+        padding: 20px; 
+        background-color:#4267B2; 
+        display: flex;
+        color: white;
+    }
+
+    .navbutton 
+    {
+        height: 5vh;
+        width: 8vw;
+    }
+
+    .content
+    {
+        padding: 5px;
+        margin-left: 10%;
+        margin-right: 10%;
+        margin-top: 5%;
+        height: calc(100vh - 25vh - 10px);
+    }
+</style>
