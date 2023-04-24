@@ -5,9 +5,53 @@
     <center>
         <h1>Reģistrācija</h1>
         <form method="post">
-            <input class="formInput" type="text" placeholder="Lietotājvārds" name="username" value="{{ request.form['username'] }}"> <br>
-            <input class="formInput" type="password" placeholder="Parole" name="password" value="{{ request.form['password'] }}"> <br>
-            <input class="formInput" type="password" placeholder="Parole atkārtoti" name="repeatPassword" value="{{ request.form['repeatPassword'] }}"> <br>
+            <input 
+            class="formInputsm" 
+            type="text" 
+            placeholder="Vārds" 
+            name="name" value="{{ request.form['name'] }}" 
+            required 
+            oninvalid="this.setCustomValidity('Lūdzu ievadiet savu vārdu')">
+            
+            <input 
+            class="formInputsm"
+            type="text" 
+            placeholder="Uzvārds" 
+            name="surname" 
+            value="{{ request.form['surname'] }}" 
+            required> <br>
+            
+            <input 
+            class="formInput" 
+            type="tel" 
+            id="phone" 
+            name="phone" 
+            required> <br>
+           
+            <input 
+            class="formInput" 
+            type="text" 
+            placeholder="Lietotājvārds" 
+            name="username" 
+            value="{{ request.form['username'] }}" 
+            required> <br>
+            
+            <input 
+            class="formInput"
+            type="password" 
+            placeholder="Parole" 
+            name="password" 
+            value="{{ request.form['password'] }}" 
+            required> <br>
+            
+            <input 
+            class="formInput" 
+            type="password" 
+            placeholder="Parole atkārtoti" 
+            name="repeatPassword" 
+            value="{{ request.form['repeatPassword'] }}" 
+            required> <br>
+           
             <input class="formButton" type="submit" value="Reģistrēties">
         </form>
         Esi jau reģistrējies?
@@ -22,6 +66,12 @@
         width: 50%;
         height:25px;
     }
+    .formInputsm
+    {
+        margin-bottom: 5px;
+        width: 24.5%;
+        height:25px;
+    }
     .formButton
     {
         margin-bottom: 5px;
@@ -30,4 +80,28 @@
         text-align: center;   
     }
 </style>
+<script>
+    const phoneInput = document.getElementById('phoneInput');
+
+phoneInput.addEventListener('input', function(e) {
+  // Remove all non-numeric characters from the input value
+  let numericValue = e.target.value.replace(/[^\d]/g, '');
+
+  // Add the country code to the input value
+  numericValue = '+371' + numericValue;
+
+  // Format the phone number in the xx-xxx-xxx format
+  let formattedValue = '';
+  for (let i = 0; i < numericValue.length; i++) {
+    if (i === 2 || i === 5) {
+      formattedValue += '-';
+    }
+    formattedValue += numericValue[i];
+  }
+
+  // Limit the input value to 11 characters (including the country code)
+  e.target.value = formattedValue.slice(0, 11);
+});
+
+</script>
 {% endblock %}
