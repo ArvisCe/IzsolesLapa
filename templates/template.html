@@ -23,6 +23,17 @@
     </div>
     <div class="content">
         {% block content %} {% endblock %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class=messages>
+                    {% for category, message in messages %}
+                        <center>
+                            <li class="message {{ category }}">{{ message }}</li>
+                        </center>        
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
     </div>
 </body>
 </html>
@@ -52,7 +63,7 @@
     .navbutton 
     {
         height: 5vh;
-        width: 8vw;
+        min-width: 80px;
     }
 
     .content
@@ -62,5 +73,28 @@
         margin-right: 10%;
         margin-top: 5%;
         height: calc(100vh - 25vh - 10px);
+    }
+
+    .message {
+        left: 50%;
+        background-color: gray;
+        text-decoration: none;
+        list-style: none;
+        width: 40%;
+        padding: 15px;
+        border-radius: 8px;    
+        margin-bottom: 1%;
+    }
+
+    .error 
+    {
+        background-color: #ff8c8c;
+        color: #210000;
+    }
+
+    .success 
+    {
+        background-color: #73ff81;
+        color: #001702;
     }
 </style>

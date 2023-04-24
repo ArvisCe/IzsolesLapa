@@ -4,10 +4,10 @@
 <div style="height: 100%; width:100%;">
     <center>
         <h1>Pieslēgties</h1>
-        <form>
-            <input class="formInput" type="text" placeholder="Lietotājvārds"> <br>
-            <input class="formInput" type="password" placeholder="Parole"> <br>
-            <input class="formButton" type="button" value="Pieslēgties">
+        <form method="post">
+            <input class="formInput" type="text" placeholder="Lietotājvārds" name="username" value="{{ request.form['username'] }}"> <br>
+            <input class="formInput" type="password" placeholder="Parole" name="password" value="{{ request.form['password'] }}"> <br>
+            <input class="formButton" type="submit" value="Pieslēgties">
         </form>
         Neesi vēl reģistrējies?
         reģistrējies <a href="{{url_for('auth.register')}}">šeit</a>!

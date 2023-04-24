@@ -1,14 +1,14 @@
 {% extends 'template.html' %}
 
 {% block content %} 
-<div style="height: 100%; width:100%;">
+<div style="width:100%;">
     <center>
         <h1>Reģistrācija</h1>
-        <form>
-            <input class="formInput" type="text" placeholder="Lietotājvārds"> <br>
-            <input class="formInput" type="password" placeholder="Parole"> <br>
-            <input class="formInput" type="password" placeholder="Parole atkārtoti"> <br>
-            <input class="formButton" type="button" value="Reģistrēties">
+        <form method="post">
+            <input class="formInput" type="text" placeholder="Lietotājvārds" name="username" value="{{ request.form['username'] }}"> <br>
+            <input class="formInput" type="password" placeholder="Parole" name="password" value="{{ request.form['password'] }}"> <br>
+            <input class="formInput" type="password" placeholder="Parole atkārtoti" name="repeatPassword" value="{{ request.form['repeatPassword'] }}"> <br>
+            <input class="formButton" type="submit" value="Reģistrēties">
         </form>
         Esi jau reģistrējies?
         ienāc <a href="{{url_for('auth.login')}}">šeit</a>!
