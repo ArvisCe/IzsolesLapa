@@ -11,7 +11,8 @@
             placeholder="Vārds" 
             name="name" value="{{ request.form['name'] }}" 
             required 
-            oninvalid="this.setCustomValidity('Lūdzu ievadiet savu vārdu')">
+            oninvalid="this.setCustomValidity('Lūdzu ievadiet savu vārdu')"
+            oninput="this.setCustomValidity('')">
             
             <input 
             class="formInputsm"
@@ -19,14 +20,19 @@
             placeholder="Uzvārds" 
             name="surname" 
             value="{{ request.form['surname'] }}" 
-            required> <br>
+            required
+            oninvalid="this.setCustomValidity('Lūdzu ievadiet savu uzvārdu')"
+            oninput="this.setCustomValidity('')"> <br>
             
             <input 
             class="formInput" 
-            type="tel" 
-            id="phone" 
+            type="text" 
+            placeholder="Telefons xxxxxxxx"
             name="phone" 
-            required> <br>
+            value="{{ request.form['phone'] }}" 
+            required
+            oninvalid="this.setCustomValidity('Lūdzu ievadiet savu telefona numuru (formāts: xxxxxxxx)')"
+            oninput="this.setCustomValidity('')"> <br>
            
             <input 
             class="formInput" 
@@ -34,7 +40,9 @@
             placeholder="Lietotājvārds" 
             name="username" 
             value="{{ request.form['username'] }}" 
-            required> <br>
+            required
+            oninvalid="this.setCustomValidity('Lūdzu ievadiet savu vēlamo lietotājvārdu')"
+            oninput="this.setCustomValidity('')"> <br>
             
             <input 
             class="formInput"
@@ -42,7 +50,9 @@
             placeholder="Parole" 
             name="password" 
             value="{{ request.form['password'] }}" 
-            required> <br>
+            required
+            oninvalid="this.setCustomValidity('Lūdzu ievadiet vēlamo paroli')"
+            oninput="this.setCustomValidity('')"> <br>
             
             <input 
             class="formInput" 
@@ -50,7 +60,9 @@
             placeholder="Parole atkārtoti" 
             name="repeatPassword" 
             value="{{ request.form['repeatPassword'] }}" 
-            required> <br>
+            required
+            oninvalid="this.setCustomValidity('Vēlamā parole jāatkārto otro reizi')"
+            oninput="this.setCustomValidity('')"> <br>
            
             <input class="formButton" type="submit" value="Reģistrēties">
         </form>
@@ -80,28 +92,4 @@
         text-align: center;   
     }
 </style>
-<script>
-    const phoneInput = document.getElementById('phoneInput');
-
-phoneInput.addEventListener('input', function(e) {
-  // Remove all non-numeric characters from the input value
-  let numericValue = e.target.value.replace(/[^\d]/g, '');
-
-  // Add the country code to the input value
-  numericValue = '+371' + numericValue;
-
-  // Format the phone number in the xx-xxx-xxx format
-  let formattedValue = '';
-  for (let i = 0; i < numericValue.length; i++) {
-    if (i === 2 || i === 5) {
-      formattedValue += '-';
-    }
-    formattedValue += numericValue[i];
-  }
-
-  // Limit the input value to 11 characters (including the country code)
-  e.target.value = formattedValue.slice(0, 11);
-});
-
-</script>
 {% endblock %}

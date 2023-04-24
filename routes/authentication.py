@@ -23,7 +23,10 @@ def register():
         username = request.form['username']
         password = request.form['password']
         rPassword = request.form['repeatPassword']
-
+        name = request.form['name']
+        surname = request.form['surname']
+        phone = request.form['phone']
+        
         # Check if password meets the requirements
         if len(password) < 8 or len(password) > 64:
             flash('Parolei jābūt starp 8 un 64 simboliem garai', 'error')
@@ -34,12 +37,12 @@ def register():
 
         # Create a new user instance and add it to the database
         new_user = User(
-            username="username123",
-            password="password123",
-            name = "name123",
-            surname = "surname123",
+            username = username,
+            password = password,
+            name = name,
+            surname = surname,
             verificationCode = "code123",
-            phone = "phoneNumber123",
+            phone = phone,
             createdOn=datetime.now(),
             isVerified=False,
             isDeleted=False
