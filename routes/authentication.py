@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from datetime import datetime
-from models import User, db, current_user, UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from models import User, db, current_user, UserMixin, login_user, LoginManager, login_required, logout_user, current_user, bcrypt
+
 
 auth = Blueprint("auth", __name__, static_folder="static", template_folder="templates")
 
@@ -18,7 +19,7 @@ def login():
         if not user:
             flash('Nepareizi ievadīts lietotājvārds vai parole!','error')
             return redirect(url_for("auth.login"))
-        if not user.password == password:
+        if not bcrypt.check_password_hash(user.password, password):
             flash('Nepareizi ievadīta parole!', 'error')
             return redirect(url_for("auth.login"))
         else:
@@ -58,7 +59,7 @@ def register():
         # Create a new user instance and add it to the database
         new_user = User(
             username = username,
-            password = password,
+            password = bcrypt.generate_password_hash(password),
             name = name,
             surname = surname,
             verificationCode = "code123",

@@ -1,5 +1,5 @@
 from flask import Flask
-from models import db, User, UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from models import db, User, UserMixin, login_user, LoginManager, login_required, logout_user, current_user, Bcrypt
 from routes.authentication import auth
 from routes.home import home
 from datetime import date, timedelta, datetime
@@ -15,6 +15,7 @@ app.permanent_session_lifetime = timedelta(days=5)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+bcrypt = Bcrypt(app)
 
 @login_manager.user_loader
 def load_user(user_id):
