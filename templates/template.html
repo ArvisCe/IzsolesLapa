@@ -10,15 +10,23 @@
     <div class="navigation">
         <h1>
             Izsoles.lv
-            <a href="{{url_for('home.index')}}">
-                <button class="navbutton">PRECES</button>
-            </a>
-            <a href="{{url_for('auth.login')}}">
-                <button class="navbutton">PIESLĒGTIES</button>
-            </a>
-            <a href="{{url_for('auth.register')}}">
-                <button class="navbutton">REĢISTRĒTIES</button>
-            </a>
+
+                <a href="{{url_for('home.index')}}">
+                    <button class="navbutton">PRECES</button>
+                </a>
+            {% if not current_user.name %}
+                <a href="{{url_for('auth.login')}}">
+                    <button class="navbutton">PIESLĒGTIES</button>
+                </a>
+                <a href="{{url_for('auth.register')}}">
+                    <button class="navbutton">REĢISTRĒTIES</button>
+                </a>
+            {% else %}
+                Sveiki, {{current_user.name}}
+                <a href="/logout">
+                    <button class="navbutton">Iziet</button>
+                </a>
+            {% endif %}
         </h1>
     </div>
     <div class="content">
