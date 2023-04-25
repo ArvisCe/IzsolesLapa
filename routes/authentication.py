@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from datetime import datetime
-from models import User, db, current_user, UserMixin, login_user, LoginManager, login_required, logout_user, current_user, bcrypt
+from models import User, db, current_user, UserMixin, login_user, LoginManager, login_required, logout_user, current_user, bcrypt, session
 
 
 auth = Blueprint("auth", __name__, static_folder="static", template_folder="templates")
@@ -24,6 +24,8 @@ def login():
             return redirect(url_for("auth.login"))
         else:
             flash('Veiksmīgi esi ticis kontā!','success')
+            session.permanent = True
+            session["user"] = user.username
             login_user(user)  
             return redirect(url_for("home.index"))           
 
@@ -70,6 +72,8 @@ def register():
         )
         db.session.add(new_user)
         db.session.commit()
+        session.permanent = True
+        session["user"] = new_user.username
         login_user(new_user)
 
         # Redirect the user to the home page

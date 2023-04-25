@@ -22,9 +22,9 @@
                     <button class="navbutton">REĢISTRĒTIES</button>
                 </a>
             {% else %}
-                Sveiki, {{current_user.name}}
+                Sveiki, {{current_user.name}} {{current_user.surname}}
                 <a href="/logout">
-                    <button class="navbutton">Iziet</button>
+                    Iziet
                 </a>
             {% endif %}
         </h1>
@@ -59,7 +59,7 @@
     {
         text-decoration: none;
     }
-
+    
     .navigation
     {
         padding: 20px; 

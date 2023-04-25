@@ -1,5 +1,5 @@
 from flask import Flask
-from models import db, User, UserMixin, login_user, LoginManager, login_required, logout_user, current_user, Bcrypt
+from models import db, User, UserMixin, login_user, LoginManager, login_required, logout_user, current_user, Bcrypt, session
 from routes.authentication import auth
 from routes.home import home
 from datetime import date, timedelta, datetime
@@ -7,14 +7,16 @@ from datetime import date, timedelta, datetime
 app = Flask(__name__)
 app.secret_key = 'DevelopmentKey123'
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///IzsoleLV.db"
+app.config['SESSION_PERMANENT'] = True
 
 db.init_app(app)
 
-app.permanent_session_lifetime = timedelta(days=5)
+app.permanent_session_lifetime = timedelta(days=2)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+
 bcrypt = Bcrypt(app)
 
 @login_manager.user_loader
