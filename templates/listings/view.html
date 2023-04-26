@@ -1,0 +1,30 @@
+{% extends 'template.html' %}
+
+{% block content %} 
+
+<center>
+    {% if current_user.id == listing.userID %}
+        <a href="/prece/rediget/{{listing.id}}">rediģēt</a>
+    {% endif %}
+    <h2>{{listing.name}}</h2>
+    <h3>{{listing.description}}</h3>
+    <img class="listingImage" src="/{{listing.image}}">
+</center>
+
+
+<style>
+
+.listingImage
+{
+    width: 20vw;
+    height: 20vw;
+    object-fit: cover;
+}
+.listingImage:hover
+{
+    width: 40vw;
+    height: auto;
+}
+
+</style>
+{% endblock %}

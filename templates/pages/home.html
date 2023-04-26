@@ -2,4 +2,62 @@
 
 {% block content %} 
 
+{% for listing in listings %}
+<a href="/prece/apskatit/{{listing.id}}">
+    <div class="Listing">
+        <div class="ListingInfo">
+            <center>    
+                <h3>{{ listing.name }}</h3>
+                <p>{{ listing.description }}</p>
+                <p>Cena: {{ listing.startPrice }} EUR ar kāpumu {{ listing.priceIncrease }}</p>
+            </center>
+        </div>
+        <div class="ListingImage">
+            <center>    
+                <img class="listingImage" src="{{listing.image}}">
+            </center>
+        </div>
+        <center>
+            Izsole notiks {{ listing.auctionTime }} <br>
+            {% if listing.auctionStatus == 0 %}
+                izsole gaida 
+            {% elif listing.auctionStatus == 1 %}
+                izsole sākas
+            {% elif listing.auctionStatus == 2 %}    
+                izsole sākusies
+            {% elif listing.auctionStatus == 3 %}
+                izsole beigusies
+            {% endif %}
+        </center>
+    </div>
+</a>
+{% endfor %}
+
+<style>
+    .Listing
+    {
+        background-color: #4267B2;
+        margin-bottom: 10px;
+        width: 40%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 8px;
+        border-radius: 6px;
+        color: white;
+    }
+    .ListingInfo
+    {
+        font-size:x-large;
+    }
+    .ListingImage
+    {
+        padding-bottom: 10px;
+    }
+    .listingImage
+    {
+        width: 20vw;
+        height: 20vw;
+        object-fit: cover;
+    }
+</style>
 {% endblock %}

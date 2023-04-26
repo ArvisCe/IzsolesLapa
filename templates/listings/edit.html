@@ -1,0 +1,54 @@
+{% extends 'template.html' %}
+
+{% block content %} 
+
+<center>
+    <h2>Rediģēt preci</h2>
+    <form method="post" enctype="multipart/form-data">
+        <input 
+        class="formInput" 
+        type="text"
+        min = "5"
+        max = "64" 
+        placeholder="Preces nosaukums" 
+        name="name"
+        value="{{listing.name}}{{ request.form['name'] }}" 
+        oninvalid="this.setCustomValidity('Ievieto savas preces nosaukumu!')"
+        oninput="this.setCustomValidity('')" required> <br>
+
+        <textarea 
+        rows="4"
+        cols="10"
+        max = "1024" 
+        class="formInputTall"  
+        type="text" 
+        placeholder="Apraksts"  
+        name="description"
+        style="height: 190px; width: 50%; resize: none;">{{listing.description}}{{ request.form['description'] }}</textarea> <br>
+
+        <label for="image">Izvēlies bildi:</label>
+        <input type="file" id="image" name="image">
+
+        <br>
+        <input class="formButton" type="submit" value="Ievietot">
+    </form>
+
+    <div class="warning">
+        <h3>Brīdinājums</h3>
+        Preces cenu, cenas kāpumu un izsoles datumu nedrīkst mainīt!<br>
+        Ja ir vēlme šīs lietas mainīt, tad izsole ir jāizdzēš!
+    </div>
+</center>
+
+<style>
+    .warning
+    {
+        background-color: rgb(255, 94, 94);
+        color:rgb(60, 0, 0);
+        width: 50%;
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}

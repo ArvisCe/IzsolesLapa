@@ -1,0 +1,104 @@
+{% extends 'template.html' %}
+
+{% block content %} 
+
+<div style="height: 100%; width:100%;">
+    <center>
+        <h2>Jauna prece</h2>
+        <form method="post" enctype="multipart/form-data">
+            <input 
+            class="formInput" 
+            type="text"
+            min = "5"
+            max = "64" 
+            placeholder="Preces nosaukums" 
+            name="name"
+            value="{{ request.form['name'] }}" 
+            oninvalid="this.setCustomValidity('Ievieto savas preces nosaukumu!')"
+            oninput="this.setCustomValidity('')" required> <br>
+
+            <textarea 
+            rows="4"
+            cols="10"
+            max = "1024" 
+            class="formInputTall"  
+            type="text" 
+            placeholder="Apraksts"  
+            name="description"
+            style="height: 190px; width: 50%; resize: none;">{{ request.form['description'] }}</textarea> <br>
+
+            <label for="price">Cena</label>
+            <input 
+            class="formInputSM" 
+            type="number" 
+            step="0.1" 
+            max="100000" 
+            min="0.01" 
+            placeholder="Cena" 
+            name="price" 
+            value="{{ request.form['price'] }}"
+            oninvalid="this.setCustomValidity('Cenai jābūt vismaz 0.01 EUR un maksimums 100,000 EUR')"
+            oninput="this.setCustomValidity('')" required>
+            
+            <label for="price" >Cenas kāpums</label>
+            <input 
+            class="formInputSM" 
+            type="number" 
+            step="0.1" 
+            max="100" 
+            min="0.01" 
+            placeholder="Cenas kāpums" 
+            name="priceIncrease" 
+            value="{{ request.form['priceIncrease'] }}"
+            oninvalid="this.setCustomValidity('Cenas kāpumam jābūt vismaz 0.01 EUR un maksimums 100 EUR')"
+            oninput="this.setCustomValidity('')" required> <br>
+
+            <label for="auctionTime">Izsoles laiks</label>
+            <input 
+            class="FormInput"
+            type="datetime-local"
+            name="auctionTime"
+            value="{{ request.form['auctionTime'] }}" 
+            oninvalid="this.setCustomValidity('Izvēlies laiku kurā būs izsole')"
+            oninput="this.setCustomValidity('')" required> 
+            <br>
+
+            <label for="image">Izvēlies bildi:</label>
+            <input type="file" id="image" name="image">
+
+            <br>
+            <input class="formButton" type="submit" value="Ievietot">
+        </form>
+    </center>
+</div>
+
+<style>
+    .formInput 
+    {
+        margin-bottom: 5px;
+        width: 50%;
+        height:25px;
+    }
+    .formInputTall
+    {
+        margin-bottom: 5px;
+        width: 50%;
+        height:80px;
+    }
+    .formInputSM
+    {
+        margin-bottom: 5px;
+        width: 10%;
+        height:25px;
+    }
+    .formButton
+    {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        width: 20%;
+        height:25px;
+        text-align: center;   
+    }
+</style>
+
+{% endblock %}

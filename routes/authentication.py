@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from datetime import datetime
 from models import User, db, current_user, UserMixin, login_user, LoginManager, login_required, logout_user, current_user, bcrypt, session
-
+import random
 
 auth = Blueprint("auth", __name__, static_folder="static", template_folder="templates")
 
@@ -64,11 +64,12 @@ def register():
             password = bcrypt.generate_password_hash(password),
             name = name,
             surname = surname,
-            verificationCode = "code123",
+            verificationCode = generatePhoneVerification(),
             phone = phone,
-            createdOn=datetime.now(),
-            isVerified=False,
-            isDeleted=False
+            createdOn = datetime.now(),
+            isVerified = False,
+            isDeleted = False,
+            isAdmin = False,
         )
         db.session.add(new_user)
         db.session.commit()
@@ -85,3 +86,24 @@ def logout():
     logout_user()
     flash('Veiksmīgi esi izgājis!','success')
     return redirect(url_for("auth.login"))
+
+@auth.route("/code")
+def checkCode():
+    return "<h1>"+generatePhoneVerification()+"</h1>"
+
+def generatePhoneVerification():
+  code = ""
+  for i in range(4):
+      for j in range(5):
+          if random.randint(0,1) == 1:
+              randomSymbol = random.randint(65,90)
+              code += chr(randomSymbol)
+          else:
+              randomSymbol = random.randint(97, 122)
+              code += chr(randomSymbol)            
+      if not i == 3:
+          code += "-"
+  CodeAlreadyExists = User.query.filter_by(verificationCode=code).first()
+  if CodeAlreadyExists:
+    code = generatePhoneVerification()
+  return code    
