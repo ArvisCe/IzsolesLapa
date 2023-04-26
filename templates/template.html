@@ -11,7 +11,7 @@
         <h1 style="color:rgb(77, 151, 77);">Izsoles.lv</h1>
         <div class="navigation">
             <a class="link" href="{{url_for('home.index')}}">
-                Preces
+                Izsoles
             </a>
             <a class="link" href="{{url_for('home.history')}}">
                 Vēsture
@@ -24,7 +24,7 @@
                     iziet 
                 </a>
                 <a class="profileInfo">
-                    Bilance: 302.40 EUR 
+                    Bilance: {{current_user.balance}} EUR 
                 </a>
                 <a class="profileInfo">
                     Arvis Ceirulis 

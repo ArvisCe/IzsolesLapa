@@ -135,7 +135,7 @@ def check_updates():
     data = []
     for listing in listings:
         data.append({
-            "id": listing.id,
+            "ident": listing.id,
             "name": listing.name,
             "description": listing.description,
             "startPrice": listing.startPrice,

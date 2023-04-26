@@ -22,8 +22,8 @@
                     style="object-fit: cover;">
                 </div>
                 <div class="listingInfo">
-                    <h1 class="listingTitle">Pārdodu lietotu Audi A6</h1>
-                    <h3 class="listingDescription">Lietots audi A6. Nobraukti 160,000 km, bet vēljoprojām brauc kā jauns. Mainīts bampers.</h3>
+                    <h1 class="name">{{listing.name}}</h1>
+                    <h3 class="listingDescription">{{listing.description}}</h3>
                     <hr>
                     <h3><span class="info">Sākuma cena: </span><span class="startPrice">{{listing.startPrice}}</span></h3>
                     <h3><span class="info">Cenas kāpums: </span><span class="priceIncrease">{{listing.priceIncrease}}</span></h3>
@@ -40,6 +40,7 @@
                             Beigusies
                         {% endif %}
                     </span></h3>
+                    <h3><span class="Date">Izsoles laiks: {{listing.auctionTime}}</span></h3>
                 </div>
             </div>
         </a> <br>
@@ -82,7 +83,7 @@
         text-decoration: none;
     }
 
-    .startingPrice
+    .startPrice
     {
         color: #A28497;
         text-decoration: none;
@@ -106,4 +107,45 @@
         text-decoration: none;  
     }
 </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $(document).ready(function() {
+    setInterval(function() {
+        $.ajax({
+        url: "/prece/check_updates",
+        type: "GET",
+        success: function(data) {
+            // Update the page content with the new data
+            // For example, you can use jQuery to update the table rows
+            $.each(data, function(index, listing) {
+            var row = $("div[data-id='" + listing.id + "']");
+            row.find(".name").text(listing.name);
+            row.find(".description").text(listing.description);
+            row.find(".startPrice").text(num.toFixed(listing.startPrice));
+            row.find(".priceIncrease").text(num.toFixed(listing.priceIncrease));
+            row.find(".auctionTime").text(listing.auctionTime);
+            row.find(".auctionStatus").text(listing.auctionStatus);
+            if(listing.auctionStatus === 0)
+            {
+                row.find(".auctionStatus").text("izsole gaida ");
+            }
+            else if(listing.auctionStatus === 1)
+            {
+                row.find(".auctionStatus").text("izsole sākas");
+            }
+            else if(listing.auctionStatus === 2)
+            {
+                row.find(".auctionStatus").text("izsole progresā");
+            }
+            else
+            {
+                row.find(".auctionStatus").text("izsole beidzās");
+            };
+            });
+        }
+        });
+    }, 5000);
+    });
+</script>
 {% endblock %}
