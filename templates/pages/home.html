@@ -19,16 +19,18 @@
         </div>
         <center>
             Izsole notiks <span class="auctionTime">{{ listing.auctionTime }}</span> <br>
-            {% if listing.auctionStatus == 0 %}
-                izsole gaida 
-            {% elif listing.auctionStatus == 1 %}
-                izsole sākas
-            {% elif listing.auctionStatus == 2 %}    
-                izsole sākusies
-            {% elif listing.auctionStatus == 3 %}
-                izsole beigusies
-            {% endif %}
-            <span class="auctionStatus">{{ listing.auctionStatus }}</span>
+
+            <span class="auctionStatus">
+                {% if listing.auctionStatus == 0 %}
+                    izsole gaida 
+                {% elif listing.auctionStatus == 1 %}
+                    izsole sākas
+                {% elif listing.auctionStatus == 2 %}    
+                    izsole progresā
+                {% elif listing.auctionStatus == 3 %}
+                    izsole beigusies
+                {% endif %}
+            </span>
         </center>
     </div>
 </a>
@@ -80,6 +82,23 @@
             row.find(".priceIncrease").text(listing.priceIncrease);
             row.find(".auctionTime").text(listing.auctionTime);
             row.find(".auctionStatus").text(listing.auctionStatus);
+            console.log(listing.auctionStatus);
+            if(listing.auctionStatus === 0)
+            {
+                row.find(".auctionStatus").text("izsole gaida ");
+            }
+            else if(listing.auctionStatus === 1)
+            {
+                row.find(".auctionStatus").text("izsole sākas");
+            }
+            else if(listing.auctionStatus === 2)
+            {
+                row.find(".auctionStatus").text("izsole progresā");
+            }
+            else
+            {
+                row.find(".auctionStatus").text("izsole beidzās");
+            };
             });
         }
         });

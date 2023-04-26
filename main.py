@@ -30,14 +30,14 @@ def load_user(user_id):
 def update_auction_status():
     with app.app_context():
         now = datetime.now()
-        listings = Listing.query.filter_by(auctionStatus=0).all()
+        listings = Listing.query.filter(Listing.auctionStatus.in_([0, 1])).all()
         for listing in listings:
             now = datetime.now()
             delta = timedelta(minutes=2)
-            if listing.auctionTime - now <= delta:
-                listing.auctionStatus = 1
-            elif listing.auctionTime <= now:
-                listing.auctionStatus = 2
+            if listing.auctionTime <= now:
+              listing.auctionStatus = 2
+            elif listing.auctionTime - now <= delta:
+              listing.auctionStatus = 1
             db.session.commit()
 
 def end_auctions():
@@ -56,7 +56,7 @@ def listing_update_thread():
     while True:
         update_auction_status()
         end_auctions()
-        time.sleep(5)
+        time.sleep(1)
 
 
 with app.app_context():
