@@ -38,6 +38,10 @@
         Preces cenu, cenas kāpumu un izsoles datumu nedrīkst mainīt!<br>
         Ja ir vēlme šīs lietas mainīt, tad izsole ir jāizdzēš!
     </div>
+    <button class="Delete" onclick="deleteWindow()">
+        Dzēst izsoli 
+    </button>
+    <div id="DeleteConfirmation"></div>
 </center>
 
 <style>
@@ -50,5 +54,30 @@
         margin-top: 20px;
         border-radius: 8px;
     }
+    .Delete
+    {
+        background-color: rgb(238, 49, 49);
+        color:rgb(245, 171, 171);
+        width: 30%;
+        padding: 5px;
+        border-style:none;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+    .Delete:active
+    {
+        background-color: rgb(171, 36, 36);
+        color:rgb(240, 231, 231);
+    }
 </style>
+<script>
+function deleteWindow() {
+    var confirmation = confirm("Vai tiešām vēlies dzēst preci?");
+  if (confirmation) {
+    window.location.replace("/prece/dzest/{{listing.id}}");
+  }
+}
+
+
+</script>
 {% endblock %}

@@ -80,9 +80,7 @@ def edit(id):
         new_filename = image_id + ext
         image.save(os.path.join('static', 'images', new_filename))
         imageLocation = "static/images/" + new_filename
-    else:
-        imageLocation = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
-    
+        listing.image = imageLocation
     errors = 0
     if 5 > len(name) < 64:
         errors += 1
@@ -97,7 +95,6 @@ def edit(id):
 
     listing.name = name
     listing.description = description
-    listing.image = imageLocation
     db.session.commit()
     flash('veiksmīgi nomainīta preces informācija','success')
     return redirect("/prece/apskatit/"+id)
@@ -118,6 +115,17 @@ def view_none():
     return redirect(url_for("home.index"))
 
 
+@listing.route("/dzest/<int:id>")
+def dzest(id):
+    listing = Listing.query.filter_by(id=id).first()
+    if not current_user.id == listing.userID and not current_user.isAdmin:
+        flash('Tev nav peieja izdzēst šo preci!', 'error')
+        return redirect(url_for("home.index"))
+    db.session.delete(listing)
+    db.session.commit()
+    flash('veiksmīgi izdzēsta prece!','success')
+    return redirect(url_for("home.index"))
+
 
 
 @listing.route("/check_updates", methods=["GET"])
@@ -136,3 +144,7 @@ def check_updates():
             "auctionStatus": listing.auctionStatus
         })
     return jsonify(data)
+
+
+
+
