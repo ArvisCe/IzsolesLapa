@@ -7,106 +7,111 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="navigation">
-        <h1>
-            Izsoles.lv
-
-                <a href="{{url_for('home.index')}}">
-                    <button class="navbutton">PRECES</button>
+    <div class="website">
+        <h1 style="color:rgb(77, 151, 77);">Izsoles.lv</h1>
+        <div class="navigation">
+            <a class="link" href="{{url_for('home.index')}}">
+                Preces
+            </a>
+            <a class="link" href="{{url_for('home.history')}}">
+                Vēsture
+            </a>
+            {% if current_user.name %}
+                <a class="link" href="{{url_for('listing.new')}}">
+                    Ievietot
                 </a>
-            {% if not current_user.name %}
-                <a href="{{url_for('auth.login')}}">
-                    <button class="navbutton">PIESLĒGTIES</button>
+                <a class="linkleft" href="/logout">
+                    iziet 
                 </a>
-                <a href="{{url_for('auth.register')}}">
-                    <button class="navbutton">REĢISTRĒTIES</button>
+                <a class="profileInfo">
+                    Bilance: 302.40 EUR 
+                </a>
+                <a class="profileInfo">
+                    Arvis Ceirulis 
                 </a>
             {% else %}
-                <a href="{{url_for('listing.new')}}">
-                    <button class="navbutton">jauna prece</button>
+                <a class="linkleft" href="{{url_for('auth.register')}}">
+                    reģistrēties
                 </a>
-                {{current_user.name}} {{current_user.surname}}
-                <a href="/logout">
-                    Iziet
+                <a class="linkleft" href="{{url_for('auth.login')}}">
+                    pieslēgties
                 </a>
             {% endif %}
-        </h1>
-    </div>
-    <div class="content">
-        {% block content %} {% endblock %}
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <ul class=messages>
-                    {% for category, message in messages %}
-                        <center>
-                            <li class="message {{ category }}">{{ message }}</li>
-                        </center>        
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
+        </div>
+    
+        <div class="content">
+            <h1>
+                <center>
+                    {% block title %}{% endblock %}
+                </center>
+            </h1>
+            {% block content %} 
+            {% endblock %}
+        </div>
     </div>
 </body>
 </html>
 
 <style>
 
-    body 
-    {
-        padding: 0px;
-        margin: 0px;
-    }
+body 
+{
+    padding: 0px;
+    margin: 0px;
+    background-color: #4A5240;
+    color: #ADA8BE;
+    width: 1920px;
+    margin: 0 auto;
+    overflow: auto;
+}
 
-    a
-    {
-        text-decoration: none;
-    }
+.website
+{
+    margin: 300px;
+    margin-top: 70px;
+
+}
+
+.navigation
+{
+    margin-top: 1vh;
+    padding: 50px;
+    background-color:#6F5E5C;
+}
+
+.content
+{
+    background-color:#6F5E5C;
+    min-height: 60vh;
+    margin-top: 4vh;
+    padding: 8px;
+}
+
+.link
+{
     
-    .navigation
-    {
-        padding: 20px; 
-        background-color:#4267B2; 
-        display: flex;
-        color: white;
-    }
-
-    .navbutton 
-    {
-        height: 5vh;
-        min-width: 80px;
-    }
-
-    .content
-    {
-        padding: 5px;
-        margin-left: 10%;
-        margin-right: 10%;
-        margin-top: 5%;
-        height: calc(100vh - 25vh - 10px);
-    }
-
-    .message {
-        left: 50%;
-        background-color: gray;
-        text-decoration: none;
-        list-style: none;
-        width: 40%;
-        padding: 15px;
-        border-radius: 8px;    
-        margin-bottom: 1%;
-    }
-
-    .error 
-    {
-        background-color: #ff8c8c;
-        color: #210000;
-    }
-
-    .success 
-    {
-        background-color: #73ff81;
-        color: #001702;
-    }
+    font-size:xx-large;
+    text-decoration: underline;
+    vertical-align: top;
+    color:#A28497;
+    margin-right: 20px;
+} 
+.linkleft
+{
+    font-size:xx-large;
+    text-decoration: underline;
+    vertical-align: top;
+    float:right;
+    color:#A28497;
+    margin-left: 20px;
+} 
+.profileInfo
+{
+    font-size:xx-large;
+    vertical-align: top;
+    float:right;
+    color:#C6CAED;
+    margin-left: 20px;
+    
+}
 </style>
-
-    

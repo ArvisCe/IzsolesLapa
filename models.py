@@ -14,12 +14,16 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=False, nullable=False)
     surname = db.Column(db.String, unique=False, nullable=False)
+
     username = db.Column(db.String, unique=True, nullable=False)
     phone = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, unique=False, nullable=False)
+
     bio = db.Column(db.String, unique=False, nullable=True)
     gender = db.Column(db.String, unique=False, nullable=True)
     profileImage = db.Column(db.String, unique=False, nullable=True)
+
+    balance = db.Column(db.Float, nullable=False)
   
     verificationCode = db.Column(db.String, unique=False, nullable=False)
 
@@ -51,6 +55,7 @@ class Listing(db.Model):
     
     startPrice = db.Column(db.Float, nullable=False)
     priceIncrease = db.Column(db.Float, nullable=False)
+    price = db.Column(db.Float, nullable=False)
 
     auctionTime = db.Column(db.DateTime, nullable=False)
     auctionStatus = db.Column(db.Integer, nullable=True)

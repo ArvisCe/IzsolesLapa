@@ -46,8 +46,10 @@ def end_auctions():
         for listing in listings:
             listingTransactions = ListingTransaction.query.filter_by(listingID=listing.id, participating=True).all()
             if not listingTransactions:
-                listing.auctionStatus = 3
-                db.session.commit()
+              listing.auctionStatus = 3
+            else:
+              listing.price = listing.price + listing.priceIncrease
+            db.session.commit()
 
 
 

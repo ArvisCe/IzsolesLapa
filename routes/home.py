@@ -6,3 +6,12 @@ home = Blueprint("home", __name__, static_folder="static", template_folder="temp
 @home.route("/")
 def index():
     return render_template('pages/home.html', listings=Listing.query.filter(Listing.auctionStatus.notin_([2, 3])).order_by(Listing.auctionTime.asc()).all())
+
+@home.route("/vesture")
+def history():
+    return render_template('pages/history.html', listings=Listing.query.filter(Listing.auctionStatus.notin_([0, 1, 2])).order_by(Listing.auctionTime.asc()).all())
+
+
+@home.route("/noteikumi")
+def rules():
+    return render_template('pages/rules.html')

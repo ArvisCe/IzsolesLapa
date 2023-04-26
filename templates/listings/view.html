@@ -4,7 +4,12 @@
 
 <center>
     {% if current_user.id == listing.userID %}
-        <a href="/prece/rediget/{{listing.id}}">rediģēt</a>
+        <a href="/prece/rediget/{{listing.id}}">rediģēt</a> <br>
+    {% endif %}
+    {% if listing.auctionStatus == 1 %}
+        <a>
+            <div class="joinAuction">Pievienoties izsolei</div>
+        </a>
     {% endif %}
     <h2>{{listing.name}}</h2>
     <h3>{{listing.description}}</h3>
@@ -26,6 +31,13 @@
     height: auto;
 }
 
+.joinAuction
+{
+    padding: 15px;
+    width: 50%;
+    background-color:#4267B2;
+    color: white;
+}
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

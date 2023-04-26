@@ -70,6 +70,7 @@ def register():
             isVerified = False,
             isDeleted = False,
             isAdmin = False,
+            balance=0.00,
         )
         db.session.add(new_user)
         db.session.commit()
@@ -107,12 +108,3 @@ def generatePhoneVerification():
   if CodeAlreadyExists:
     code = generatePhoneVerification()
   return code    
-
-
-
-
-
-def check_authorization():
-    secret_key = request.headers.get('X-Secret-Key')
-    if secret_key != app.config['SECRET_KEY']:
-        abort(401)

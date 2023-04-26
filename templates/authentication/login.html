@@ -9,8 +9,8 @@
             <input class="formInput" type="password" placeholder="Parole" name="password" value="{{ request.form['password'] }}"> <br>
             <input class="formButton" type="submit" value="Pieslēgties">
         </form>
-        Neesi vēl reģistrējies?
-        reģistrējies <a href="{{url_for('auth.register')}}">šeit</a>!
+        <h2>Neesi vēl reģistrējies?
+        reģistrējies <a href="{{url_for('auth.register')}}">šeit</a>!</h2>
     </center>
 </div>
 
@@ -19,14 +19,18 @@
     {
         margin-bottom: 5px;
         width: 50%;
-        height:25px;
+        height:50px;
+        font-size:larger; 
+        border-radius: 5px;
     }
     .formButton
     {
         margin-bottom: 5px;
         width: 20%;
-        height:25px;
-        text-align: center;   
+        height:50px;
+        text-align: center; 
+        font-size:larger; 
+        border-radius: 5px;  
     }
 </style>
 {% endblock %}

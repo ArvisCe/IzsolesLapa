@@ -66,8 +66,8 @@
            
             <input class="formButton" type="submit" value="Reģistrēties">
         </form>
-        Esi jau reģistrējies?
-        ienāc <a href="{{url_for('auth.login')}}">šeit</a>!
+        <h2>Esi jau reģistrējies?
+        ienāc <a href="{{url_for('auth.login')}}">šeit</a>!</h2>
     </center>
 </div>
 
@@ -76,20 +76,27 @@
     {
         margin-bottom: 5px;
         width: 50%;
-        height:25px;
+        height:50px;
+        font-size:larger;
+        border-radius: 5px;
     }
     .formInputsm
     {
         margin-bottom: 5px;
         width: 24.5%;
-        height:25px;
+        height:50px;
+        font-size:larger;
+        border-radius: 5px;
     }
     .formButton
     {
         margin-bottom: 5px;
+        margin-top: 5px;
         width: 20%;
-        height:25px;
-        text-align: center;   
+        height:50px;
+        text-align: center;  
+        font-size:larger; 
+        border-radius: 5px;
     }
 </style>
 {% endblock %}

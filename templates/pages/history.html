@@ -3,7 +3,7 @@
 
 <!-- title -->
 
-{% block title %} Preces {% endblock %}
+{% block title %} Izsoļu vēsture {% endblock %}
 
 <!-- content -->
 
@@ -106,45 +106,4 @@
         text-decoration: none;  
     }
 </style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-    $(document).ready(function() {
-    setInterval(function() {
-        $.ajax({
-        url: "/prece/check_updates",
-        type: "GET",
-        success: function(data) {
-            // Update the page content with the new data
-            // For example, you can use jQuery to update the table rows
-            $.each(data, function(index, listing) {
-            var row = $("div[data-id='" + listing.id + "']");
-            row.find(".name").text(listing.name);
-            row.find(".description").text(listing.description);
-            row.find(".startPrice").text(num.toFixed(listing.startPrice));
-            row.find(".priceIncrease").text(num.toFixed(listing.priceIncrease));
-            row.find(".auctionTime").text(listing.auctionTime);
-            row.find(".auctionStatus").text(listing.auctionStatus);
-            if(listing.auctionStatus === 0)
-            {
-                row.find(".auctionStatus").text("izsole gaida ");
-            }
-            else if(listing.auctionStatus === 1)
-            {
-                row.find(".auctionStatus").text("izsole sākas");
-            }
-            else if(listing.auctionStatus === 2)
-            {
-                row.find(".auctionStatus").text("izsole progresā");
-            }
-            else
-            {
-                row.find(".auctionStatus").text("izsole beidzās");
-            };
-            });
-        }
-        });
-    }, 5000);
-    });
-</script>
 {% endblock %}

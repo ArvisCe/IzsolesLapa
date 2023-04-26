@@ -52,6 +52,7 @@ def new():
             description = description,
             startPrice = price,
             priceIncrease = priceIncrease,
+            price = price,
             auctionTime = auctionTime,
             image=imageLocation,
             auctionStatus = 0,
@@ -141,7 +142,8 @@ def check_updates():
             "priceIncrease": listing.priceIncrease,
             "auctionTime": listing.auctionTime.strftime("%Y-%m-%d %H:%M:%S"),
             "image": listing.image,
-            "auctionStatus": listing.auctionStatus
+            "auctionStatus": listing.auctionStatus,
+            "price": listing.price,
         })
     return jsonify(data)
 
