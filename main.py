@@ -81,4 +81,4 @@ app.register_blueprint(listing, url_prefix="/prece")
 if __name__ == "__main__":
     listingUpdateThread = threading.Thread(target=listing_update_thread)
     listingUpdateThread.start()
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=81)
