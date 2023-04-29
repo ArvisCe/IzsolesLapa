@@ -5,7 +5,7 @@ home = Blueprint("home", __name__, static_folder="static", template_folder="temp
 @home.route("/home")
 @home.route("/")
 def index():
-    return render_template('pages/home.html', listings=Listing.query.filter(Listing.auctionStatus.notin_([2, 3])).order_by(Listing.auctionTime.asc()).all())
+    return render_template('pages/home.html', listings=Listing.query.filter(Listing.auctionStatus.notin_([3])).order_by(Listing.auctionTime.asc()).all())
 
 @home.route("/vesture")
 def history():

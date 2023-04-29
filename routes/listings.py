@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request, redirect, flash, url_for
 from datetime import datetime
-from models import Listing, db, current_user
+from models import Listing, db, current_user, ListingTransaction
 import os
 import uuid
 
@@ -36,7 +36,7 @@ def new():
     errors = 0
     if 5 > len(name) < 64:
         errors += 1
-        flash('Nosaukumam jābūt starp 8 un 64 simboliem!','error')
+        flash('Nosaukumam jābūt starp 5 un 64 simboliem!','error')
     if 0.01 > float(price) < 100000:
         errors += 1
         flash('Cenai jābūt starp 0.01 EUR un 100,000 EUR','error')
@@ -128,6 +128,65 @@ def dzest(id):
     return redirect(url_for("home.index"))
 
 
+@listing.route("/pievienoties/<int:id>")
+def join(id):
+    listing = Listing.query.filter_by(id=id).first()
+    if listing.auctionStatus != 1:
+        flash('Izsolei vairs nevar pievienoties!','error')
+        return redirect("/prece/"+listing.id)
+    if listing.userID == current_user.id:
+        flash('Savai izsolei nevar pievienoties!','error')
+        return redirect("/prece/"+listing.id)
+    if ListingTransaction.query.filter_by(buyerID=current_user.id,listingID=id).first():
+        redirect(url_for("listing.auction",id=id))
+    if not current_user:
+        flash('lai pievienotos izsolei jābūt reģistrētam lietotājam!','error')
+    else:
+        newTransaction = ListingTransaction(
+            price = listing.price,
+            participating = True,
+            buyerID = current_user.id,
+            listingID = id,
+            date = datetime.now(),
+        )
+        db.session.add(newTransaction)
+        db.session.commit()
+        return redirect(url_for("listing.auction",id=id))
+
+@listing.route("/iziet/<int:id>")
+def exit(id):
+    listing = Listing.query.filter_by(id=id).first()
+    userTransaction = ListingTransaction.query.filter_by(buyerID=current_user.id, listingID=id).first()
+    if not userTransaction:
+        return redirect(url_for("home.index"))
+    if listing.auctionStatus == 1:
+        db.session.delete(userTransaction)
+    else:
+        userTransaction.participating = False
+        userTransaction.price = listing.price
+        userTransaction.date = datetime.now()
+    db.session.commit()
+    flash("veiksmīgi esi izstājies no izsoles!","success")
+    return redirect(url_for("home.index"))
+
+@listing.route("/izsole/<int:id>")
+def auction(id):
+    listing = Listing.query.filter_by(id=id).first()
+    userTransactions = ListingTransaction.query.filter_by(buyerID=current_user.id).all()
+    joinedAuction = False
+    for userTransaction in userTransactions:
+        if userTransaction.listingID == id:
+            joinedAuction = True
+
+    if not joinedAuction:
+        if listing.auctionStatus == 1:
+            return redirect("/prece/pievienoties/"+id)
+        else:
+            flash("izsolei vairs nevar pievienoties!","error")
+            return redirect(url_for("home.index"))
+    
+    return redirect(url_for("participatingIn"))
+
 
 @listing.route("/check_updates", methods=["GET"])
 def check_updates():
@@ -150,3 +209,24 @@ def check_updates():
 
 
 
+@listing.route("/manas")
+def myListings():
+    if not current_user:
+        flash('Tev jāreģistrējas, lai redzētu savas izsoles!','error')
+        return redirect(url_for("home.index"))
+    
+    return render_template("listings/myListings.html", listings = Listing.query.filter_by(userID=current_user.id).all())
+
+
+@listing.route("/piedalos")
+def participatingIn():
+    if not current_user:
+        flash('Tev jāreģistrējas, lai pievienotos izsolei!','error')
+        return redirect(url_for("home.index"))
+    
+    listings = []
+    userTransactions = ListingTransaction.query.filter_by(buyerID=current_user.id).all()
+    for transaction in userTransactions:
+        if transaction.participating:
+            listings += Listing.query.filter_by(id=transaction.listingID)
+    return render_template("pages/participatingIn.html", listings = listings)

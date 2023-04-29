@@ -20,6 +20,13 @@
                 <a class="link" href="{{url_for('listing.new')}}">
                     Ievietot
                 </a>
+                <a class="link" href="{{url_for('listing.myListings')}}">
+                    Ievietojumi
+                </a>
+                <a class="link" href="{{url_for('listing.participatingIn')}}">
+                    Piedalos
+                </a>
+
                 <a class="linkleft" href="/logout">
                     iziet 
                 </a>
@@ -27,7 +34,7 @@
                     Bilance: {{current_user.balance}} EUR 
                 </a>
                 <a class="profileInfo">
-                    Arvis Ceirulis 
+                    {{current_user.username}}
                 </a>
             {% else %}
                 <a class="linkleft" href="{{url_for('auth.register')}}">
@@ -56,6 +63,7 @@
 
 body 
 {
+    font-family: Arial;
     padding: 0px;
     margin: 0px;
     background-color: #4A5240;
