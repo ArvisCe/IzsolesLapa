@@ -5,6 +5,71 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    {% block heading %} {% endblock %}
+    <style>
+
+        body 
+        {
+            font-family: Arial;
+            padding: 0px;
+            margin: 0px;
+            background-color: #4A5240;
+            color: #ADA8BE;
+            width: 1920px;
+            margin: 0 auto;
+            overflow: auto;
+        }
+        
+        .website
+        {
+            margin: 300px;
+            margin-top: 70px;
+        
+        }
+        
+        .navigation
+        {
+            margin-top: 1vh;
+            padding: 50px;
+            background-color:#6F5E5C;
+        }
+        
+        .content
+        {
+            background-color:#6F5E5C;
+            min-height: 60vh;
+            margin-top: 4vh;
+            padding: 8px;
+        }
+        
+        .link
+        {
+            
+            font-size:xx-large;
+            text-decoration: underline;
+            vertical-align: top;
+            color:#A28497;
+            margin-right: 20px;
+        } 
+        .linkleft
+        {
+            font-size:xx-large;
+            text-decoration: underline;
+            vertical-align: top;
+            float:right;
+            color:#A28497;
+            margin-left: 20px;
+        } 
+        .profileInfo
+        {
+            font-size:xx-large;
+            vertical-align: top;
+            float:right;
+            color:#C6CAED;
+            margin-left: 20px;
+            
+        }
+        </style>
 </head>
 <body>
     <div class="website">
@@ -59,67 +124,3 @@
 </body>
 </html>
 
-<style>
-
-body 
-{
-    font-family: Arial;
-    padding: 0px;
-    margin: 0px;
-    background-color: #4A5240;
-    color: #ADA8BE;
-    width: 1920px;
-    margin: 0 auto;
-    overflow: auto;
-}
-
-.website
-{
-    margin: 300px;
-    margin-top: 70px;
-
-}
-
-.navigation
-{
-    margin-top: 1vh;
-    padding: 50px;
-    background-color:#6F5E5C;
-}
-
-.content
-{
-    background-color:#6F5E5C;
-    min-height: 60vh;
-    margin-top: 4vh;
-    padding: 8px;
-}
-
-.link
-{
-    
-    font-size:xx-large;
-    text-decoration: underline;
-    vertical-align: top;
-    color:#A28497;
-    margin-right: 20px;
-} 
-.linkleft
-{
-    font-size:xx-large;
-    text-decoration: underline;
-    vertical-align: top;
-    float:right;
-    color:#A28497;
-    margin-left: 20px;
-} 
-.profileInfo
-{
-    font-size:xx-large;
-    vertical-align: top;
-    float:right;
-    color:#C6CAED;
-    margin-left: 20px;
-    
-}
-</style>

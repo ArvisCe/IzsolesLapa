@@ -5,48 +5,8 @@
 
 {% block title %} Izsoļu vēsture {% endblock %}
 
-<!-- content -->
+{% block heading %} 
 
-{% block content %} 
-
-<!--img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"-->
-<center>
-    {% for listing in listings %}
-        <a href="/prece/apskatit/{{listing.id}}">
-            <div class="listing">
-                <div class="listingImage">
-                    <img 
-                    src="{{listing.image}}" 
-                    id="image{{listing.id}}"
-                    width= "256px"
-                    height = "256px"
-                    style="object-fit: cover;">
-                </div>
-                <div class="listingInfo">
-                    <h1 class="name" id="name{{listing.id}}">{{listing.name}}</h1>
-                    <h3 class="description" id="description{{listing.id}}">{{listing.description}}</h3>
-                    <hr>
-                    <h3><span class="info">Sākuma cena: </span><span class="startPrice" id="startPrice{{listing.id}}">{{listing.startPrice}}</span></h3>
-                    <h3><span class="info">Cenas kāpums: </span><span class="priceIncrease" id="priceIncrease{{listing.id}}">{{listing.priceIncrease}}</span></h3>
-                    <h3><span class="info">Izsoles statuss: 
-                        
-                    </span><span class="auctionDate" id="auctionStatus{{listing.id}}">
-                        {% if listing.auctionStatus == 0 %}
-                            Jāgaida lai pievienotos
-                        {% elif listing.auctionStatus == 1 %}
-                            Var pievienoties
-                        {% elif listing.auctionStatus == 2 %}
-                            Vairs nevar pievienoties
-                        {% else %}
-                            Beigusies
-                        {% endif %}
-                    </span></h3>
-                    <h3><span class="Date">Izsoles laiks: {{listing.auctionTime}}</span></h3>
-                </div>
-            </div>
-        </a> <br>
-    {% endfor %}
-</center>
 <style>
     a
     {
@@ -110,6 +70,50 @@
     }
 </style>
 
+{% endblock %}
+
+<!-- content -->
+
+{% block content %} 
+
+<!--img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"-->
+<center>
+    {% for listing in listings %}
+        <a href="/prece/apskatit/{{listing.id}}">
+            <div class="listing">
+                <div class="listingImage">
+                    <img 
+                    src="{{listing.image}}" 
+                    id="image{{listing.id}}"
+                    width= "256px"
+                    height = "256px"
+                    style="object-fit: cover;">
+                </div>
+                <div class="listingInfo">
+                    <h1 class="name" id="name{{listing.id}}">{{listing.name}}</h1>
+                    <h3 class="description" id="description{{listing.id}}">{{listing.description}}</h3>
+                    <hr>
+                    <h3><span class="info">Sākuma cena: </span><span class="startPrice" id="startPrice{{listing.id}}">{{listing.startPrice}}</span></h3>
+                    <h3><span class="info">Cenas kāpums: </span><span class="priceIncrease" id="priceIncrease{{listing.id}}">{{listing.priceIncrease}}</span></h3>
+                    <h3><span class="info">Izsoles statuss: 
+                        
+                    </span><span class="auctionDate" id="auctionStatus{{listing.id}}">
+                        {% if listing.auctionStatus == 0 %}
+                            Jāgaida lai pievienotos
+                        {% elif listing.auctionStatus == 1 %}
+                            Var pievienoties
+                        {% elif listing.auctionStatus == 2 %}
+                            Vairs nevar pievienoties
+                        {% else %}
+                            Beigusies
+                        {% endif %}
+                    </span></h3>
+                    <h3><span class="Date">Izsoles laiks: {{listing.auctionTime}}</span></h3>
+                </div>
+            </div>
+        </a> <br>
+    {% endfor %}
+</center>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).ready(function() {
