@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from datetime import datetime
-from models import User, db, current_user, UserMixin, login_user, LoginManager, login_required, logout_user, current_user, bcrypt, session
+from models import User, db, current_user, UserMixin, login_user, LoginManager, login_required, logout_user, current_user, bcrypt, session, pytz
 import random
 
 auth = Blueprint("auth", __name__, static_folder="static", template_folder="templates")
@@ -59,6 +59,8 @@ def register():
             return redirect(url_for("auth.register"))
 
         # Create a new user instance and add it to the database
+        latvia_timezone = pytz.timezone('Europe/Riga')
+        current_time = datetime.now(latvia_timezone)
         new_user = User(
             username = username,
             password = bcrypt.generate_password_hash(password),
@@ -66,7 +68,7 @@ def register():
             surname = surname,
             verificationCode = generatePhoneVerification(),
             phone = phone,
-            createdOn = datetime.now(),
+            createdOn = current_time,
             isVerified = False,
             isDeleted = False,
             isAdmin = False,

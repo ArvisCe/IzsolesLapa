@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request, redirect, flash, url_for
 from datetime import datetime
-from models import Listing, db, current_user, ListingTransaction
+from models import Listing, db, current_user, ListingTransaction, pytz
 import os
 import uuid
 
@@ -15,7 +15,9 @@ def new():
     description = request.form['description']
     price = request.form['price']
     priceIncrease = request.form['priceIncrease']
-    auctionTime = datetime.strptime(request.form['auctionTime'], '%Y-%m-%dT%H:%M')
+    latvia_timezone = pytz.timezone('Europe/Riga')
+    auctionTime_str = request.form['auctionTime']
+    auctionTime = datetime.fromisoformat(auctionTime_str).replace(tzinfo=None).astimezone(latvia_timezone)
     image = request.files['image']
     if image:
         image = request.files['image']
@@ -47,6 +49,8 @@ def new():
     if errors > 0:
         return redirect(url_for('listing.new'))
     else:
+        latvia_timezone = pytz.timezone('Europe/Riga')
+        current_time = datetime.now(latvia_timezone)
         new_listing = Listing(
             name = name,
             description = description,
@@ -57,7 +61,7 @@ def new():
             image=imageLocation,
             auctionStatus = 0,
             userID = current_user.id,
-            creationDate = datetime.now(),
+            creationDate = current_time,
         )
         db.session.add(new_listing)
         db.session.commit()
@@ -143,12 +147,14 @@ def join(id):
     if not current_user:
         flash('lai pievienotos izsolei jābūt reģistrētam lietotājam!','error')
     else:
+        latvia_timezone = pytz.timezone('Europe/Riga')
+        current_time = datetime.now(latvia_timezone)
         newTransaction = ListingTransaction(
             price = listing.price,
             participating = True,
             buyerID = current_user.id,
             listingID = id,
-            date = datetime.now(),
+            date = current_time,
         )
         db.session.add(newTransaction)
         db.session.commit()
@@ -163,9 +169,12 @@ def exit(id):
     if listing.auctionStatus == 1:
         db.session.delete(userTransaction)
     else:
+        latvia_timezone = pytz.timezone('Europe/Riga')
+        current_time = datetime.now(latvia_timezone)
+
         userTransaction.participating = False
         userTransaction.price = listing.price
-        userTransaction.date = datetime.now()
+        userTransaction.date = current_time
     db.session.commit()
     flash("veiksmīgi esi izstājies no izsoles!","success")
     return redirect(url_for("home.index"))

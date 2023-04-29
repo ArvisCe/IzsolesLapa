@@ -1,7 +1,7 @@
 import threading
 import time
 from flask import Flask
-from models import db, User, LoginManager, Bcrypt, Listing, ListingTransaction
+from models import db, User, LoginManager, Bcrypt, Listing, ListingTransaction, pytz
 from routes.authentication import auth
 from routes.home import home
 from routes.listings import listing
@@ -29,16 +29,20 @@ def load_user(user_id):
 # listing update functions
 def update_auction_status():
     with app.app_context():
-        now = datetime.now()
-        listings = Listing.query.filter(Listing.auctionStatus.in_([0, 1])).all()
-        for listing in listings:
-            now = datetime.now()
-            delta = timedelta(minutes=2)
-            if listing.auctionTime <= now:
+      latvia_timezone = pytz.timezone('Europe/Riga')
+      now = datetime.now(latvia_timezone)
+      listings = Listing.query.filter(Listing.auctionStatus.in_([0, 1])).all()
+      for listing in listings:
+          auctionTime = pytz.timezone('UTC').localize(listing.auctionTime).astimezone(latvia_timezone)
+          delta = timedelta(minutes=2)
+
+          auctionTimeOffset = timedelta(hours=3)
+          auctionTime = auctionTime - auctionTimeOffset
+          if auctionTime <= now:
               listing.auctionStatus = 2
-            elif listing.auctionTime - now <= delta:
+          elif auctionTime - now <= delta:
               listing.auctionStatus = 1
-            db.session.commit()
+          db.session.commit()
 
 def end_auctions():
     with app.app_context():
