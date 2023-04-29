@@ -1,4 +1,4 @@
-import threading
+import multiprocessing
 import time
 from flask import Flask
 from models import db, User, LoginManager, Bcrypt, Listing, ListingTransaction, pytz
@@ -25,6 +25,13 @@ bcrypt = Bcrypt(app)
 @login_manager.user_loader
 def load_user(user_id):
   return User.query.get(int(user_id))
+
+with app.app_context():
+  db.create_all()
+
+app.register_blueprint(auth, url_prefix="")
+app.register_blueprint(home, url_prefix="")
+app.register_blueprint(listing, url_prefix="/prece")
 
 # listing update functions
 def update_auction_status():
@@ -57,34 +64,23 @@ def end_auctions():
               listing.price = listing.price + listing.priceIncrease
             db.session.commit()
 
+def run_flask_app():
+    app.run(debug=True, host='0.0.0.0', port=5000)
 
 
-# listing updater
-def listing_update_thread():
+def run_while_loop():
     while True:
         update_auction_status()
         end_auctions()
         time.sleep(1)
 
-
-with app.app_context():
-  db.create_all()
-
-
-# authentication routes
-app.register_blueprint(auth, url_prefix="")
-
-# item view and main routes 
-app.register_blueprint(home, url_prefix="")
-
-# listing CRUD routes
-app.register_blueprint(listing, url_prefix="/prece")
-
-
-
-
-
 if __name__ == "__main__":
-    listingUpdateThread = threading.Thread(target=listing_update_thread)
-    listingUpdateThread.start()
-    app.run(debug=True, host='0.0.0.0', port=81)
+    multiprocessing.set_start_method('spawn', True)
+    flask_process = multiprocessing.Process(target=run_flask_app)
+    while_process = multiprocessing.Process(target=run_while_loop)
+
+    flask_process.start()
+    while_process.start()
+
+    flask_process.join()
+    while_process.join()
