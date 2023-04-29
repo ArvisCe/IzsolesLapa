@@ -38,6 +38,8 @@ def update_auction_status():
 
           auctionTimeOffset = timedelta(hours=3)
           auctionTime = auctionTime - auctionTimeOffset
+          print(f"Auction time: {auctionTime}")
+          print(f"Now: {now}")
           if auctionTime <= now:
               listing.auctionStatus = 2
           elif auctionTime - now <= delta:
