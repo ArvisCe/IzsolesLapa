@@ -57,6 +57,7 @@ def new():
             image=imageLocation,
             auctionStatus = 0,
             userID = current_user.id,
+            creationDate = datetime.now(),
         )
         db.session.add(new_listing)
         db.session.commit()
