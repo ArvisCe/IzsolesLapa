@@ -64,6 +64,8 @@ class Listing(db.Model):
     categoryID = db.Column(db.Integer, db.ForeignKey('Category.id'))
     userID = db.Column(db.Integer, db.ForeignKey('User.id'))
 
+    creationDate = db.Column(db.DateTime, nullable=True)
+
     ListingTransactions = db.relationship('ListingTransaction', backref='Listing', lazy=True)
 
 class ListingTransaction(db.Model):

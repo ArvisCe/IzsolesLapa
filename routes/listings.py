@@ -203,6 +203,7 @@ def check_updates():
             "image": listing.image,
             "auctionStatus": listing.auctionStatus,
             "price": listing.price,
+            "creation-date":listing.creationDate,
         })
     return jsonify(data)
 
