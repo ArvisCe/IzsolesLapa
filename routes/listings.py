@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request, redirect, flash, url_for
 from datetime import datetime
-from models import Listing, db, current_user, ListingTransaction, pytz
+from models import Listing, db, current_user, ListingTransaction, pytz, timedelta
 import os
 import uuid
 
@@ -198,8 +198,39 @@ def auction(id):
     return redirect(url_for("participatingIn"))
 
 
+# listing update functions
+def update_auction_status():
+    latvia_timezone = pytz.timezone('Europe/Riga')
+    now = datetime.now(latvia_timezone)
+    listings = Listing.query.filter(Listing.auctionStatus.in_([0, 1])).all()
+    for listing in listings:
+        auctionTime = pytz.timezone('UTC').localize(listing.auctionTime).astimezone(latvia_timezone)
+        delta = timedelta(minutes=2)
+
+        auctionTimeOffset = timedelta(hours=3)
+        auctionTime = auctionTime - auctionTimeOffset
+        print(f"Auction time: {auctionTime}")
+        print(f"Now: {now}")
+        if auctionTime <= now:
+            listing.auctionStatus = 2
+        elif auctionTime - now <= delta:
+            listing.auctionStatus = 1
+        db.session.commit()
+
+def end_auctions():
+    listings = Listing.query.filter_by(auctionStatus=2).all()
+    for listing in listings:
+        listingTransactions = ListingTransaction.query.filter_by(listingID=listing.id, participating=True).all()
+        if not listingTransactions:
+            listing.auctionStatus = 3
+        else:
+            listing.price = listing.price + listing.priceIncrease
+        db.session.commit()
+
 @listing.route("/check_updates", methods=["GET"])
 def check_updates():
+    update_auction_status()
+    end_auctions()
     listings = Listing.query.all()
     data = []
     for listing in listings:

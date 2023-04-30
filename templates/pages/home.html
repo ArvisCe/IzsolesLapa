@@ -133,7 +133,6 @@
                 document.getElementById("startPrice"+listing.ident).innerHTML = listing.startPrice;
                 document.getElementById("priceIncrease"+listing.ident).innerHTML = listing.priceIncrease;
                 document.getElementById("image"+listing.ident).src = listing.image; 
-                document.getElementById("creation-date"+listing.ident).innerHTML = listing.creationDate;
                 if(listing.auctionStatus === 0)
                 {
                     document.getElementById('auctionStatus'+listing.ident).innerHTML = "izsole gaida";
@@ -154,7 +153,7 @@
             });
         }
         });
-    }, 5000);
+    }, 1000);
     });
 </script>
 {% endblock %}
