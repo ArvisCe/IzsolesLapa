@@ -15,7 +15,8 @@ def new():
     description = request.form['description']
     price = request.form['price']
     priceIncrease = request.form['priceIncrease']
-    auctionTime = request.form['auctionTime']
+    auctionTime = request.form['auctionTime'] 
+    image = request.files['image']
     if image:
         image = request.files['image']
         # generate a unique ID for the image filename
