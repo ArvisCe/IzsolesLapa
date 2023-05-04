@@ -120,18 +120,14 @@
     $(document).ready(function() {
     setInterval(function() {
         $.ajax({
-        url: "/prece/check_updates",
-        type: "GET",
+        url: "{{url_for('listing.dbUpdate')}}",
+        type: "GET",    
         success: function(data) {
-            // Update the page content with the new data
-            // For example, you can use jQuery to update the table rows
-            $.each(data, function(index, listing) {
+             $.each(data, function(index, listing) {
             var row = $("div[data-id='" + listing.id + "']");
             if(document.getElementById("name"+listing.ident)){
                 document.getElementById("name"+listing.ident).innerHTML = listing.name;
                 document.getElementById("description"+listing.ident).innerHTML = listing.description;
-                document.getElementById("startPrice"+listing.ident).innerHTML = listing.startPrice;
-                document.getElementById("priceIncrease"+listing.ident).innerHTML = listing.priceIncrease;
                 document.getElementById("image"+listing.ident).src = listing.image; 
                 if(listing.auctionStatus === 0)
                 {

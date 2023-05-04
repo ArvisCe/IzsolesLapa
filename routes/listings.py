@@ -1,6 +1,6 @@
-from flask import Blueprint, jsonify, render_template, request, redirect, flash, url_for
-from datetime import datetime
-from models import Listing, db, current_user, ListingTransaction, pytz, timedelta
+from flask import jsonify, Blueprint, render_template, request, redirect, flash, url_for
+from datetime import timedelta, datetime
+from models import Listing, db, current_user, ListingTransaction, pytz
 import os
 import uuid
 
@@ -44,13 +44,16 @@ def new():
         flash('Cenai jābūt starp 0.01 EUR un 100,000 EUR','error')
     if len(description) > 1024:
         errors += 1
-        flash('apraksts nedrīkst pārsniegt 1024 simbolus!', 'error') 
+        flash('Apraksts nedrīkst pārsniegt 1024 simbolus!', 'error') 
 
     if errors > 0:
         return redirect(url_for('listing.new'))
     else:
         latvia_timezone = pytz.timezone('Europe/Riga')
         current_time = datetime.now(latvia_timezone)
+        if auctionTime - current_time < timedelta(days=0):
+            flash('Izsole nedrīkst notikt ātrāk par 24 stundām nākotnē!','error')
+            return redirect(url_for('listing.new'))
         new_listing = Listing(
             name = name,
             description = description,
@@ -138,10 +141,10 @@ def join(id):
     listing = Listing.query.filter_by(id=id).first()
     if listing.auctionStatus != 1:
         flash('Izsolei vairs nevar pievienoties!','error')
-        return redirect("/prece/"+listing.id)
+        return redirect("/prece/apskatit/"+str(listing.id))
     if listing.userID == current_user.id:
         flash('Savai izsolei nevar pievienoties!','error')
-        return redirect("/prece/"+listing.id)
+        return redirect("/prece/apskatit/"+str(listing.id))
     if ListingTransaction.query.filter_by(buyerID=current_user.id,listingID=id).first():
         redirect(url_for("listing.auction",id=id))
     if not current_user:
@@ -197,60 +200,6 @@ def auction(id):
     
     return redirect(url_for("participatingIn"))
 
-
-# listing update functions
-def update_auction_status():
-    latvia_timezone = pytz.timezone('Europe/Riga')
-    now = datetime.now(latvia_timezone)
-    listings = Listing.query.filter(Listing.auctionStatus.in_([0, 1])).all()
-    for listing in listings:
-        auctionTime = pytz.timezone('UTC').localize(listing.auctionTime).astimezone(latvia_timezone)
-        delta = timedelta(minutes=2)
-
-        auctionTimeOffset = timedelta(hours=3)
-        auctionTime = auctionTime - auctionTimeOffset
-        print(f"Auction time: {auctionTime}")
-        print(f"Now: {now}")
-        if auctionTime <= now:
-            listing.auctionStatus = 2
-        elif auctionTime - now <= delta:
-            listing.auctionStatus = 1
-        db.session.commit()
-
-def end_auctions():
-    listings = Listing.query.filter_by(auctionStatus=2).all()
-    for listing in listings:
-        listingTransactions = ListingTransaction.query.filter_by(listingID=listing.id, participating=True).all()
-        if not listingTransactions:
-            listing.auctionStatus = 3
-        else:
-            listing.price = listing.price + listing.priceIncrease
-        db.session.commit()
-
-@listing.route("/check_updates", methods=["GET"])
-def check_updates():
-    update_auction_status()
-    end_auctions()
-    listings = Listing.query.all()
-    data = []
-    for listing in listings:
-        data.append({
-            "ident": listing.id,
-            "name": listing.name,
-            "description": listing.description,
-            "startPrice": listing.startPrice,
-            "priceIncrease": listing.priceIncrease,
-            "auctionTime": listing.auctionTime.strftime("%Y-%m-%d %H:%M:%S"),
-            "image": listing.image,
-            "auctionStatus": listing.auctionStatus,
-            "price": listing.price,
-            "creation-date":listing.creationDate,
-        })
-    return jsonify(data)
-
-
-
-
 @listing.route("/manas")
 def myListings():
     if not current_user:
@@ -272,3 +221,18 @@ def participatingIn():
         if transaction.participating:
             listings += Listing.query.filter_by(id=transaction.listingID)
     return render_template("pages/participatingIn.html", listings = listings)
+
+@listing.route("/db/refresh/get", methods=["GET"])
+def dbUpdate():
+    listings = Listing.query.all()
+    data = []
+    for listing in listings:
+        data.append({
+            "ident": listing.id,
+            "name": listing.name,
+            "description": listing.description,
+            "image": listing.image,
+            "auctionStatus": listing.auctionStatus,
+            "price": listing.price,
+        })
+    return jsonify(data)
