@@ -198,7 +198,7 @@ def auction(id):
             flash("izsolei vairs nevar pievienoties!","error")
             return redirect(url_for("home.index"))
     
-    return redirect(url_for("participatingIn"))
+    return redirect(url_for("listing.participatingIn"))
 
 @listing.route("/manas")
 def myListings():
