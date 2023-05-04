@@ -15,10 +15,7 @@ def new():
     description = request.form['description']
     price = request.form['price']
     priceIncrease = request.form['priceIncrease']
-    latvia_timezone = pytz.timezone('Europe/Riga')
-    auctionTime_str = request.form['auctionTime']
-    auctionTime = datetime.fromisoformat(auctionTime_str).replace(tzinfo=None).astimezone(latvia_timezone)
-    image = request.files['image']
+    auctionTime = request.form['auctionTime']
     if image:
         image = request.files['image']
         # generate a unique ID for the image filename
