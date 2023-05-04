@@ -49,7 +49,7 @@ def new():
     else:
         latvia_timezone = pytz.timezone('Europe/Riga')
         current_time = datetime.now(latvia_timezone)
-        if auctionTime - current_time < timedelta(days=0):
+        if auctionTime.replace(tzinfo=None) - current_time.replace(tzinfo=None) < timedelta(days=0):
             flash('Izsole nedrīkst notikt ātrāk par 24 stundām nākotnē!','error')
             return redirect(url_for('listing.new'))
         new_listing = Listing(
