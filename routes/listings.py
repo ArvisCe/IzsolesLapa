@@ -15,7 +15,7 @@ def new():
     description = request.form['description']
     price = request.form['price']
     priceIncrease = request.form['priceIncrease']
-    auctionTime = request.form['auctionTime'] 
+    auctionTime = datetime.strptime(request.form['auctionTime'] ,'%Y-%m-%d')
     image = request.files['image']
     if image:
         image = request.files['image']
