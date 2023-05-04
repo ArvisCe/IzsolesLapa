@@ -23,7 +23,9 @@ app.register_blueprint(listing, url_prefix="/prece")
 with app.app_context():
   db.create_all()
   def update_auction_status():
+    print("updating auction status")
     with app.app_context():
+        print("inside app context!")
         latvia_timezone = pytz.timezone('Europe/Riga')
         now = datetime.now(latvia_timezone)
         listings = Listing.query.filter(Listing.auctionStatus.in_([0, 1])).all()
