@@ -1,6 +1,6 @@
 import time
 from flask import Flask
-from models import db, User, LoginManager, Bcrypt, Listing, ListingTransaction, pytz
+from models import db, User, LoginManager, Bcrypt, Listing, ListingTransaction, pytz, current_user
 from datetime import timedelta, datetime
 from routes.authentication import auth
 from routes.home import home
@@ -23,9 +23,7 @@ app.register_blueprint(listing, url_prefix="/prece")
 with app.app_context():
   db.create_all()
   def update_auction_status():
-    print("updating auction status")
     with app.app_context():
-        print("inside app context!")
         latvia_timezone = pytz.timezone('Europe/Riga')
         now = datetime.now(latvia_timezone)
         listings = Listing.query.filter(Listing.auctionStatus.in_([0, 1])).all()
@@ -42,7 +40,7 @@ with app.app_context():
             elif auctionTime - now <= delta:
                 listing.auctionStatus = 1
             db.session.commit()
-        end_auctions()  
+        end_auctions()
 
   def end_auctions():
     with app.app_context():
@@ -52,6 +50,10 @@ with app.app_context():
           if not listingTransactions:
               listing.auctionStatus = 3
           else:
+              for transaction in listingTransactions:
+                  user = User.query.filter_by(id=transaction.buyerID).first()
+                  if user.balance < listing.price:
+                      transaction.participating = False
               listing.price = listing.price + listing.priceIncrease
           db.session.commit()
           

@@ -156,6 +156,7 @@ def join(id):
             buyerID = current_user.id,
             listingID = id,
             date = current_time,
+            winner = False,
         )
         db.session.add(newTransaction)
         db.session.commit()

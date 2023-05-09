@@ -6,7 +6,7 @@
     {% if current_user.id == listing.userID %}
         <a href="/prece/rediget/{{listing.id}}">rediģēt</a> <br>
     {% endif %}
-    {% if listing.auctionStatus == 1 %}
+    {% if listing.auctionStatus == 1 and not current_user.id == listing.userID %}
         <a href="/prece/pievienoties/{{listing.id}}">
             <div class="joinAuction">Pievienoties izsolei</div>
         </a>

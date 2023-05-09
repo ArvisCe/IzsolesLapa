@@ -5,52 +5,8 @@
 
 {% block title %} Izsoles {% endblock %}
 
-<!-- content -->
+{% block heading %}
 
-{% block content %} 
-
-<!--img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"-->
-<center>
-    {% for listing in listings %}
-        <a href="/prece/apskatit/{{listing.id}}">
-            <div class="listing">
-                <div class="listingImage">
-                    <img 
-                    src="/{{listing.image}}" 
-                    id="image{{listing.id}}"
-                    width= "256px"
-                    height = "256px"
-                    style="object-fit: cover;">
-                </div>
-                <div class="listingInfo">
-                    <h1 class="name" id="name{{listing.id}}">{{listing.name}}</h1>
-                    <h3 class="description" id="description{{listing.id}}">{{listing.description}}</h3>
-                    <hr>
-                    <h3><span class="info">Sākuma cena: </span><span class="startPrice" id="startPrice{{listing.id}}">{{listing.startPrice}}</span></h3>
-                    <h3><span class="info">Cenas kāpums: </span><span class="priceIncrease" id="priceIncrease{{listing.id}}">{{listing.priceIncrease}}</span></h3>
-                    <h3><span class="info">Izsoles statuss: 
-                        
-                    </span><span class="auctionDate" id="auctionStatus{{listing.id}}">
-                        {% if listing.auctionStatus == 0 %}
-                            izsole gaida
-                        {% elif listing.auctionStatus == 1 %}
-                            izsole sākas
-                        {% elif listing.auctionStatus == 2 %}
-                            Izsole progresā
-                        {% else %}
-                            izsole beidzās
-                        {% endif %}
-                    </span></h3>
-                    <h3><span class="info">Izsoles cena: </span><span class="price" id="price{{listing.id}}">{{listing.price}}</span></h3>
-                        
-                    </span></h3>
-                    <h3><span class="Date">Izsoles laiks: {{listing.auctionTime}}</span></h3>
-                    <a href="/prece/iziet/{{listing.id}}">Izstāties no izsoles</a>
-                </div>
-            </div>
-        </a> <br>
-    {% endfor %}
-</center>
 <style>
     a
     {
@@ -95,19 +51,13 @@
         text-decoration: none;
     }
 
-    .priceIncrease
+    .price
     {
         color: #A28497;
         text-decoration: none;
     }
 
     .auctionDate
-    {
-        color: #A28497; 
-        text-decoration: none;
-    }
-
-    .price
     {
         color: #A28497; 
         text-decoration: none;
@@ -120,25 +70,66 @@
     }
 </style>
 
+{% endblock %}
+
+<!-- content -->
+
+{% block content %} 
+
+<!--img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"--></center>
+<center>
+    {% for listing in listings %}
+        <a href="/prece/apskatit/{{listing.id}}">
+            <div class="listing">
+                <div class="listingImage">
+                    <img 
+                    src="{{listing.image}}" 
+                    id="image{{listing.id}}"
+                    width= "256px"
+                    height = "256px"
+                    style="object-fit: cover;">
+                </div>
+                <div class="listingInfo">
+                    <h1 class="name" id="name{{listing.id}}">{{listing.name}}</h1>
+                    <h3 class="description" id="description{{listing.id}}">{{listing.description}}</h3>
+                    <hr>
+                    <h3><span class="info">Sākuma cena: </span><span class="startPrice" id="startPrice{{listing.id}}">{{listing.startPrice}}</span></h3>
+                    <h3><span class="info">Cena: </span><span class="price" id="price{{listing.id}}">{{listing.price}}</span></h3>
+                    <h3><span class="info">Izsoles statuss: 
+                        
+                    </span><span class="auctionDate" id="auctionStatus{{listing.id}}">
+                        {% if listing.auctionStatus == 0 %}
+                            izsole gaida
+                        {% elif listing.auctionStatus == 1 %}
+                            izsole sākas
+                        {% elif listing.auctionStatus == 2 %}
+                            Izsole progresā
+                        {% else %}
+                            izsole beidzās
+                        {% endif %}
+                    </span></h3>
+                    <h3><span class="Date">Izsoles laiks: {{listing.auctionTime}}</span></h3>
+                </div>
+            </div>
+        </a> <br>
+    {% endfor %}
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).ready(function() {
     setInterval(function() {
         $.ajax({
-        url: "/prece/check_updates",
-        type: "GET",
+        url: "{{url_for('listing.dbUpdate')}}",
+        type: "GET",    
         success: function(data) {
-            // Update the page content with the new data
-            // For example, you can use jQuery to update the table rows
-            $.each(data, function(index, listing) {
+             $.each(data, function(index, listing) {
             var row = $("div[data-id='" + listing.id + "']");
             if(document.getElementById("name"+listing.ident)){
                 document.getElementById("name"+listing.ident).innerHTML = listing.name;
                 document.getElementById("description"+listing.ident).innerHTML = listing.description;
-                document.getElementById("startPrice"+listing.ident).innerHTML = listing.startPrice;
-                document.getElementById("priceIncrease"+listing.ident).innerHTML = listing.priceIncrease;
-                document.getElementById("image"+listing.ident).src = "/"+listing.image; 
-                document.getElementById("price"+listing.ident).innerHTML = listing.price;
+                document.getElementById("image"+listing.ident).src = listing.image; 
+                document.getElementById("price"+listing.ident).src = listing.price;
                 if(listing.auctionStatus === 0)
                 {
                     document.getElementById('auctionStatus'+listing.ident).innerHTML = "izsole gaida";

@@ -76,6 +76,8 @@ class ListingTransaction(db.Model):
     price = db.Column(db.Float, nullable=False)
     participating = db.Column(db.Boolean, nullable=False)
     
+    winner = db.Column(db.Boolean, nullable=False)
+    
     buyerID = db.Column(db.Integer, db.ForeignKey('User.id'))
     listingID =  db.Column(db.Integer, db.ForeignKey('Listing.id'))
 

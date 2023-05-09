@@ -15,15 +15,37 @@
             margin: 0px;
             background-color: #4A5240;
             color: #ADA8BE;
-            width: 1920px;
+            width: 100vw;
             margin: 0 auto;
             overflow: auto;
         }
-        
+        @media screen and (min-width: 601px) {
+            link {
+                font-size: 4vw;
+            }
+            lineleft {
+                font-size: 4vw;
+            }
+            profileInfo {
+                font-size: 4vw;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            link {
+                font-size: 6vw;
+            }
+            linkleft {
+                font-size: 6vw;
+            }
+            profileInfo {
+                font-size: 6vw;
+            }
+        }
         .website
         {
-            margin: 300px;
-            margin-top: 70px;
+            margin: 10vw;
+            margin-top: 30px;
         
         }
         
@@ -45,7 +67,6 @@
         .link
         {
             
-            font-size:xx-large;
             text-decoration: underline;
             vertical-align: top;
             color:#A28497;
@@ -53,7 +74,6 @@
         } 
         .linkleft
         {
-            font-size:xx-large;
             text-decoration: underline;
             vertical-align: top;
             float:right;
@@ -62,7 +82,6 @@
         } 
         .profileInfo
         {
-            font-size:xx-large;
             vertical-align: top;
             float:right;
             color:#C6CAED;
