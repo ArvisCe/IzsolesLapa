@@ -48,10 +48,10 @@ def new():
     if len(name) < 5 or len(name) > 64:
         errors += 1
         flash('Nosaukumam jābūt starp 5 un 64 simboliem!','error')
-    if 0.01 > float(price) < 100000:
+    if float(price) < 0.01 or float(price) > 100000:
         errors += 1
         flash('Cenai jābūt starp 0.01 EUR un 100,000 EUR','error')
-    if 0.01 > float(priceIncrease) < 100:
+    if float(price) < 0.01 or float(priceIncrease) > 100:
         errors += 1
         flash('Cenas jābūt starp 0.01 EUR un 100 EUR','error')
     if len(description) > 1024:
