@@ -50,8 +50,8 @@ with app.app_context():
         listings = Listing.query.filter(Listing.auctionStatus.in_([0, 1])).all()
         for listing in listings:
             auctionTime = pytz.timezone('UTC').localize(listing.auctionTime).astimezone(latvia_timezone)
-            print("latvia time: "+str(now))
-            print("auction time: "+str(auctionTime))
+            #print("latvia time: "+str(now))
+            #print("auction time: "+str(auctionTime))
             delta = timedelta(minutes=2)
 
             auctionTimeOffset = timedelta(hours=3)
