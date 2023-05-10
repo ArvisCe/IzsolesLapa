@@ -17,6 +17,7 @@ def new():
     priceIncrease = request.form['priceIncrease']
     auctionTime = datetime.strptime(request.form['auctionTime'], '%Y-%m-%dT%H:%M')
     image = request.files['image']
+    errors = 0
     if image:
         image = request.files['image']
         # generate a unique ID for the image filename
@@ -27,13 +28,17 @@ def new():
 
         # construct the new filename using the image ID and extension
         new_filename = image_id + ext
-
+        extension = new_filename.split(".")[1]
+        if not extension in ["png","jpeg","jpg",""]:
+            flash("bildei jābūt png vai jpeg formātā",'error')
+            print(extension)
+            errors += 1
         # save the image in the static folder with the new filename
         image.save(os.path.join('static', 'images', new_filename))
         imageLocation = "/static/images/" + new_filename
     else:
         imageLocation = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
-    errors = 0
+    
     if 5 > len(name) < 64:
         errors += 1
         flash('Nosaukumam jābūt starp 5 un 64 simboliem!','error')
