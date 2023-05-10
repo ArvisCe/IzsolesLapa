@@ -38,7 +38,9 @@ def new():
         imageLocation = "/static/images/" + new_filename
     else:
         imageLocation = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
-    
+    if not isinstance(auctionTime, datetime.datetime):
+        errors += 1
+        flash("Tu nedrīksti vienkārši rakstīt ko tu gribi datetime. ip grabbed.",'error')
     if 5 > len(name) < 64:
         errors += 1
         flash('Nosaukumam jābūt starp 5 un 64 simboliem!','error')
