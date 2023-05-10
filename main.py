@@ -25,7 +25,7 @@ app.register_blueprint(admin, url_prefix="/admin")
 
 # give admins to specific users
 def makeAdmins():
-    ids=["2"]
+    ids=[]
     for id in ids:
         user  = User.query.filter_by(id=id).first()
         user.isAdmin = True
@@ -40,9 +40,9 @@ def removeAdmins():
     db.session.commit()
 
 with app.app_context():
-  makeAdmins()
-  removeAdmins()
   db.create_all()
+  #makeAdmins()
+  #removeAdmins()
   def update_auction_status():
     with app.app_context():
         latvia_timezone = pytz.timezone('Europe/Riga')
