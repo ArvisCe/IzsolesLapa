@@ -39,12 +39,21 @@ def new():
     else:
         imageLocation = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
 
+    if not isinstance(price, str):
+        flash("Nemaini datu tipus, dauni!",'error')
+        errors += 1
+    if not isinstance(priceIncrease, str):
+        flash("Nemaini datu tipus, dauni!",'error')
+        errors += 1
     if len(name) < 5 or len(name) > 64:
         errors += 1
         flash('Nosaukumam jābūt starp 5 un 64 simboliem!','error')
     if 0.01 > float(price) < 100000:
         errors += 1
         flash('Cenai jābūt starp 0.01 EUR un 100,000 EUR','error')
+    if 0.01 > float(priceIncrease) < 100:
+        errors += 1
+        flash('Cenas jābūt starp 0.01 EUR un 100 EUR','error')
     if len(description) > 1024:
         errors += 1
         flash('Apraksts nedrīkst pārsniegt 1024 simbolus!', 'error') 
@@ -60,13 +69,10 @@ def new():
         flash("Tu nedrīksti vienkārši rakstīt ko tu gribi datetime. ip grabbed.",'error')
         errors += 1
         
-    if not isinstance(price, str):
-        flash("Nemaini datu tipus, dauni!",'error')
-        errors += 1
+
         
     if errors > 0:
         return redirect(url_for('listing.new'))
-    
     new_listing = Listing(
         name = name,
         description = description,
