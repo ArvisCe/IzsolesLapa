@@ -5,6 +5,7 @@ from datetime import timedelta, datetime
 from routes.authentication import auth
 from routes.home import home
 from routes.listings import listing
+from routes.admin import admin
 from app import app
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -19,8 +20,28 @@ app.register_blueprint(home, url_prefix="")
 # listing CRUD routes
 app.register_blueprint(listing, url_prefix="/prece")
 
+# listing admin routes
+app.register_blueprint(admin, url_prefix="/admin")
+
+# give admins to specific users
+def makeAdmins():
+    ids=["2"]
+    for id in ids:
+        user  = User.query.filter_by(id=id).first()
+        user.isAdmin = True
+    db.session.commit()
+
+# remove admin from specific users
+def removeAdmins():
+    ids=[]
+    for id in ids:
+        user  = User.query.filter_by(id=id).first()
+        user.isAdmin = False
+    db.session.commit()
 
 with app.app_context():
+  makeAdmins()
+  removeAdmins()
   db.create_all()
   def update_auction_status():
     with app.app_context():

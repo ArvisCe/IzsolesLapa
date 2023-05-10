@@ -13,7 +13,7 @@
     {% endif %}
     <h2>{{listing.name}}</h2>
     <h3>{{listing.description}}</h3>
-    <img class="listingImage" src="/{{listing.image}}">
+    <img class="listingImage" src="{{listing.image}}">
 </center>
 
 
@@ -39,29 +39,4 @@
     color: white;
 }
 </style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-    $(document).ready(function() {
-      setInterval(function() {
-        $.ajax({
-          url: "/prece/check_updates",
-          type: "GET",
-          success: function(data) {
-            // Update the page content with the new data
-            // For example, you can use jQuery to update the table rows
-            $.each(data, function(index, listing) {
-              var row = $("tr[data-id='" + listing.id + "']");
-              row.find(".name").text(listing.name);
-              row.find(".description").text(listing.description);
-              row.find(".startPrice").text(listing.startPrice);
-              row.find(".priceIncrease").text(listing.priceIncrease);
-              row.find(".auctionTime").text(listing.auctionTime);
-              row.find(".auctionStatus").text(listing.auctionStatus);
-            });
-          }
-        });
-      }, 2000); // Send a request every 5 seconds
-    });
-</script>
 {% endblock %}

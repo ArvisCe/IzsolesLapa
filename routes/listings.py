@@ -30,7 +30,7 @@ def new():
 
         # save the image in the static folder with the new filename
         image.save(os.path.join('static', 'images', new_filename))
-        imageLocation = "static/images/" + new_filename
+        imageLocation = "/static/images/" + new_filename
     else:
         imageLocation = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
     errors = 0
@@ -43,31 +43,30 @@ def new():
     if len(description) > 1024:
         errors += 1
         flash('Apraksts nedrīkst pārsniegt 1024 simbolus!', 'error') 
-
+    
+    latvia_timezone = pytz.timezone('Europe/Riga')
+    current_time = datetime.now(latvia_timezone)
+    if auctionTime.replace(tzinfo=None) - current_time.replace(tzinfo=None) < timedelta(days=1):
+        flash('Izsole nedrīkst notikt ātrāk par 24 stundām nākotnē!','error')
+        errors += 1
     if errors > 0:
         return redirect(url_for('listing.new'))
-    else:
-        latvia_timezone = pytz.timezone('Europe/Riga')
-        current_time = datetime.now(latvia_timezone)
-        if auctionTime.replace(tzinfo=None) - current_time.replace(tzinfo=None) < timedelta(days=0):
-            flash('Izsole nedrīkst notikt ātrāk par 24 stundām nākotnē!','error')
-            return redirect(url_for('listing.new'))
-        new_listing = Listing(
-            name = name,
-            description = description,
-            startPrice = price,
-            priceIncrease = priceIncrease,
-            price = price,
-            auctionTime = auctionTime,
-            image=imageLocation,
-            auctionStatus = 0,
-            userID = current_user.id,
-            creationDate = current_time,
-        )
-        db.session.add(new_listing)
-        db.session.commit()
-        flash('veiksmīgi ievietota prece!','success')
-        return redirect(url_for('home.index'))
+    new_listing = Listing(
+        name = name,
+        description = description,
+        startPrice = price,
+        priceIncrease = priceIncrease,
+        price = price,
+        auctionTime = auctionTime,
+        image=imageLocation,
+        auctionStatus = 0,
+        userID = current_user.id,
+        creationDate = current_time,
+    )
+    db.session.add(new_listing)
+    db.session.commit()
+    flash('veiksmīgi ievietota prece!','success')
+    return redirect(url_for('home.index'))
 
 @listing.route("/rediget/<id>", methods=["GET","POST"])
 def edit(id):

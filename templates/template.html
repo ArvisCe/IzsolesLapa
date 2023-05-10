@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     {% block heading %} {% endblock %}
+
+
+    
     <style>
 
         body 
@@ -88,9 +91,85 @@
             margin-left: 20px;
             
         }
+
+
+        .flash 
+        {
+            position: fixed;    
+            left: 50%;
+            bottom: 0px;
+        }
+        .flashInner
+        {
+            position: relative;
+            left: -50%; 
+        }
+        .error 
+        {
+            padding: 20px; 
+            padding-right: 80px;
+            padding-left: 80px;
+            background-color: #c22c21;
+            color: #f0aaa5; 
+        }
+        .errorbutton 
+        {
+            content-align:right;
+            background-color: #c22c21;
+            color: white;
+            margin-style: none;
+            border-style: none;
+        }
+        .success 
+        {
+            padding: 20px; 
+            padding-right: 80px;
+            padding-left: 80px;
+            background-color: #28660d;
+            color: #c2edaf; 
+        }
+        .successbutton 
+        {
+            content-align:right;
+            background-color: #28660d;
+            color: white;
+            margin-style: none;
+            border-style: none;
+        }
         </style>
 </head>
 <body>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for category, message in messages %}
+                <div class="flash">
+                    <div class="flashInner">
+                        <p  class="{{ category }}">{{ message }}
+
+                            <button 
+                                id="close" 
+                                onclick="this.parentNode.parentNode.remove(); return false;"
+                                class="{{category}}button"
+                                >
+                                x
+                            </button>     
+                        </p>
+                         
+                    </div>
+                </div>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}   
+
+
+
+
+
+
     <div class="website">
         <h1 style="color:rgb(77, 151, 77);">Izsoles.lv</h1>
         <div class="navigation">
