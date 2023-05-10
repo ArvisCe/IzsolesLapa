@@ -43,16 +43,22 @@ def register():
         
         # Check if password meets the requirements
         Errors = 0
+        if len(name) < 2 or len(name) > 32:
+            flash('Vārdam jābūt starp 2 un 32 simboliem garam!','error')
+            Errors += 1
+        if len(surname) > 32:
+            flash('Uzvārds var būt tikai īsāks pr 32 simboliem!','error')
+            Errors += 1    
         if len(password) < 8 or len(password) > 64:
             flash('Parolei jābūt starp 8 un 64 simboliem garai', 'error')
-            return redirect(url_for("auth.register"))
-        elif rPassword != password:
+            Errors += 1
+        if rPassword != password:
             flash('Paroles nesakrīt!', 'error')
             Errors += 1
-        elif User.query.filter_by(username=username).first():
+        if User.query.filter_by(username=username).first():
             flash('Lietotājs ar šādu lietotājvārdu jau eksistē!','error')
             Errors += 1
-        elif User.query.filter_by(phone=phone).first():
+        if User.query.filter_by(phone=phone).first():
             flash('Lietotājs ar šādu telefona numuru jau ir reģistrēts! '+phone, 'error')
             Errors += 1
         if Errors > 0:

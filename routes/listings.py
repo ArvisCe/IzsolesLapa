@@ -39,7 +39,7 @@ def new():
     else:
         imageLocation = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
 
-    if 5 > len(name) < 64:
+    if len(name) < 5 or len(name) > 64:
         errors += 1
         flash('Nosaukumam jābūt starp 5 un 64 simboliem!','error')
     if 0.01 > float(price) < 100000:
@@ -48,7 +48,6 @@ def new():
     if len(description) > 1024:
         errors += 1
         flash('Apraksts nedrīkst pārsniegt 1024 simbolus!', 'error') 
-    
     latvia_timezone = pytz.timezone('Europe/Riga')
     current_time = datetime.now(latvia_timezone)
 
@@ -58,11 +57,16 @@ def new():
             flash('Izsole nedrīkst notikt ātrāk par 24 stundām nākotnē!','error')
             errors += 1
     except ValueError:
-        errors += 1
         flash("Tu nedrīksti vienkārši rakstīt ko tu gribi datetime. ip grabbed.",'error')
+        errors += 1
+        
+    if not isinstance(price, str):
+        flash("Nemaini datu tipus, dauni!",'error')
+        errors += 1
         
     if errors > 0:
         return redirect(url_for('listing.new'))
+    
     new_listing = Listing(
         name = name,
         description = description,
