@@ -15,7 +15,7 @@ def new():
     description = request.form['description']
     price = request.form['price']
     priceIncrease = request.form['priceIncrease']
-    auctionTime = datetime.strptime(request.form['auctionTime'], '%Y-%m-%dT%H:%M')
+    auctionTime = request.form['auctionTime']
     image = request.files['image']
     errors = 0
     if image:
@@ -38,9 +38,7 @@ def new():
         imageLocation = "/static/images/" + new_filename
     else:
         imageLocation = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
-    if not type(auctionTime) is datetime.datetime:
-        errors += 1
-        flash("Tu nedrīksti vienkārši rakstīt ko tu gribi datetime. ip grabbed.",'error')
+
     if 5 > len(name) < 64:
         errors += 1
         flash('Nosaukumam jābūt starp 5 un 64 simboliem!','error')
@@ -53,9 +51,16 @@ def new():
     
     latvia_timezone = pytz.timezone('Europe/Riga')
     current_time = datetime.now(latvia_timezone)
-    if auctionTime.replace(tzinfo=None) - current_time.replace(tzinfo=None) < timedelta(days=1):
-        flash('Izsole nedrīkst notikt ātrāk par 24 stundām nākotnē!','error')
+
+    
+    if not isinstance(auctionTime, datetime):
         errors += 1
+        flash("Tu nedrīksti vienkārši rakstīt ko tu gribi datetime. ip grabbed.",'error')
+    else:
+        auctionTime = datetime.strptime(request.form['auctionTime'], '%Y-%m-%dT%H:%M')
+        if auctionTime.replace(tzinfo=None) - current_time.replace(tzinfo=None) < timedelta(days=1):
+            flash('Izsole nedrīkst notikt ātrāk par 24 stundām nākotnē!','error')
+            errors += 1
     if errors > 0:
         return redirect(url_for('listing.new'))
     new_listing = Listing(
