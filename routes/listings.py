@@ -242,9 +242,9 @@ def participatingIn():
             listings += Listing.query.filter_by(id=transaction.listingID)
     return render_template("pages/participatingIn.html", listings = listings)
 
-@listing.route("/db/refresh/get", methods=["GET"])
-def dbUpdate():
-    listings = Listing.query.all()
+@listing.route("/db/refresh/get/<int:page>", methods=["GET"])
+def dbUpdate(page):
+    listings = Listing.query.filter(Listing.auctionStatus.notin_([3])).order_by(Listing.auctionTime.asc()).offset(page*6).limit(10).all()
     data = []
     for listing in listings:
         data.append({

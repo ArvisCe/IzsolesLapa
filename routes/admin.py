@@ -31,3 +31,27 @@ def view_user(id):
         flash("PARASTIE MIRSTĪGIE NEDRĪKST APSKATĪT",'error')
         return redirect(url_for("home.index"))
     return render_template("/admin/view_user.html", user = User.query.filter_by(id=id).first())
+
+
+@admin.route("/update_user/<int:id>", methods=["POST"])
+def update_user(id):
+    if not current_user.isAdmin:
+        flash("Tev nebūs mainīt lietotājus!",'error')
+        return redirect(url_for("home.index"))
+    user = User.query.filter_by(id=id).first()
+    errors = 0
+    username = request.form["username"]
+    name = request.form["name"]
+    balance = request.form["balance"]
+    if User.query.filter_by(username=username).first():
+        flash("Nevar 2 lietotājiem būt 1 lietotājvārds! :D","error")
+        errors += 1
+    
+    if errors > 0:
+        return redirect(url_for("admin.view_users"))
+    user.username = username
+    user.name = name
+    user.balance = balance
+    db.session.commit()
+    flash("veiksmīgi rediģēts lietotājs!",'success')
+    return redirect(url_for("admin.view_users"))

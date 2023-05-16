@@ -6,6 +6,7 @@ from routes.authentication import auth
 from routes.home import home
 from routes.listings import listing
 from routes.admin import admin
+from routes.user import user
 from app import app
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -23,26 +24,31 @@ app.register_blueprint(listing, url_prefix="/prece")
 # listing admin routes
 app.register_blueprint(admin, url_prefix="/admin")
 
+# listing user routes
+app.register_blueprint(user, url_prefix="/lietotajs")
+
 # give admins to specific users
 def makeAdmins():
-    ids=[]
-    for id in ids:
-        user  = User.query.filter_by(id=id).first()
-        user.isAdmin = True
-    db.session.commit()
-
+    with app.app_context():
+        ids=["5"]
+        if ids:
+            for id in ids:
+                user  = User.query.filter_by(id=id).first()
+                user.isAdmin = True
+            db.session.commit()
+        removeAdmins()
 # remove admin from specific users
 def removeAdmins():
-    ids=[]
-    for id in ids:
-        user  = User.query.filter_by(id=id).first()
-        user.isAdmin = False
-    db.session.commit()
+    with app.app_context():
+        ids=[]
+        if ids:
+            for id in ids:
+                user  = User.query.filter_by(id=id).first()
+                user.isAdmin = False
+            db.session.commit()
 
 with app.app_context():
   db.create_all()
-  #makeAdmins()
-  #removeAdmins()
   def update_auction_status():
     with app.app_context():
         latvia_timezone = pytz.timezone('Europe/Riga')
@@ -80,9 +86,10 @@ with app.app_context():
           
   scheduler = BackgroundScheduler()
   scheduler.add_job(update_auction_status,'interval',seconds=1)
+  scheduler.add_job(makeAdmins,'interval',seconds=1)
   print("scheduler start")
   scheduler.start()
   
   
 if __name__ == "__main__":
-    app.run(debug=False, host='0.0.0.0', port=8000)
+    app.run(debug=True, host='0.0.0.0', port=8000)

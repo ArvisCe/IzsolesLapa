@@ -114,10 +114,8 @@
         }
         .errorbutton 
         {
-            content-align:right;
             background-color: #c22c21;
             color: white;
-            margin-style: none;
             border-style: none;
         }
         .success 
@@ -130,10 +128,8 @@
         }
         .successbutton 
         {
-            content-align:right;
             background-color: #28660d;
             color: white;
-            margin-style: none;
             border-style: none;
         }
         </style>
@@ -186,19 +182,24 @@
                 <a class="link" href="{{url_for('listing.myListings')}}">
                     Ievietojumi
                 </a>
-                <a class="link" href="{{url_for('listing.participatingIn')}}">
-                    Piedalos
-                </a>
 
                 <a class="linkleft" href="/logout">
                     iziet 
                 </a>
+                <a class="linkleft" href="{{url_for('user.profile')}}">
+                    Profils
+                </a>
                 <a class="profileInfo">
-                    Bilance: {{current_user.balance}} EUR 
+                    {{current_user.balance}}€
                 </a>
                 <a class="profileInfo">
                     {{current_user.username}}
                 </a>
+                {% if current_user.isAdmin %}
+                    <a class="linkleft" href="{{url_for('admin.view_users')}}">
+                        Admin
+                    </a>
+                {% endif %}
             {% else %}
                 <a class="linkleft" href="{{url_for('auth.register')}}">
                     reģistrēties

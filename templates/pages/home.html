@@ -75,9 +75,16 @@
 <!-- content -->
 
 {% block content %} 
-
+    
 <!--img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"--></center>
 <center>
+    {% for number in range(1, pageAmount) %}
+        {% if number == page + 1 %}
+            <a style="color:#691069; text-decoration: underline;" href="/izsoles/{{number}}">{{number}}</a>
+        {% else %}
+            <a href="/izsoles/{{number}}">{{number}}</a>
+        {% endif %}
+    {% endfor %}
     {% for listing in listings %}
         <a href="/prece/apskatit/{{listing.id}}">
             <div class="listing">
@@ -114,14 +121,20 @@
         </a> <br>
     {% endfor %}
 
-
+    {% for number in range(1, pageAmount) %}
+        {% if number == page + 1 %}
+            <a style="color:#691069; text-decoration: underline;" href="/izsoles/{{number}}">{{number}}</a>
+        {% else %}
+            <a href="/izsoles/{{number}}">{{number}}</a>
+        {% endif %}
+    {% endfor %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).ready(function() {
     setInterval(function() {
         $.ajax({
-        url: "{{url_for('listing.dbUpdate')}}",
-        type: "GET",    
+        url: "/db/refresh/get/{{page}}",
+        type: "GET", 
         success: function(data) {
              $.each(data, function(index, listing) {
             var row = $("div[data-id='" + listing.id + "']");
