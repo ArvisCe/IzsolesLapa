@@ -68,6 +68,11 @@
         color: #A28497;
         text-decoration: none;  
     }
+
+    .description
+    {
+        word-break:keep-all;
+    }
 </style>
 
 {% endblock %}
@@ -98,7 +103,12 @@
                 </div>
                 <div class="listingInfo">
                     <h1 class="name" id="name{{listing.id}}">{{listing.name}}</h1>
-                    <h3 class="description" id="description{{listing.id}}">{{listing.description}}</h3>
+                    
+                    {% if listing.description|length > 50 %}
+                        <h3 class="description" id="description{{listing.id}}">{{listing.description[:50]}} ...</h3>
+                    {% else %}
+                        <h3 class="description" id="description{{listing.id}}">{{listing.description[:50]}}</h3>
+                    {% endif %}       
                     <hr>
                     <h3><span class="info">Sākuma cena: </span><span class="startPrice" id="startPrice{{listing.id}}">{{listing.startPrice}}</span></h3>
                     <h3><span class="info">Cenas kāpums: </span><span class="priceIncrease" id="priceIncrease{{listing.id}}">{{listing.priceIncrease}}</span></h3>
@@ -133,7 +143,7 @@
     $(document).ready(function() {
     setInterval(function() {
         $.ajax({
-        url: "/db/refresh/get/{{page}}",
+        url: "prece/db/refresh/get/{{page}}",
         type: "GET", 
         success: function(data) {
              $.each(data, function(index, listing) {

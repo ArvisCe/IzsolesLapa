@@ -45,9 +45,9 @@ def new():
     if not isinstance(priceIncrease, str):
         flash("Nemaini datu tipus, dauni!",'error')
         errors += 1
-    if len(name) < 5 or len(name) > 64:
+    if len(name) < 5 or len(name) > 48:
         errors += 1
-        flash('Nosaukumam jābūt starp 5 un 64 simboliem!','error')
+        flash('Nosaukumam jābūt starp 5 un 48 simboliem!','error')
     if float(price) < 0.01 or float(price) > 100000:
         errors += 1
         flash('Cenai jābūt starp 0.01 EUR un 100,000 EUR','error')
@@ -62,7 +62,7 @@ def new():
 
     try:
         auctionTime = datetime.strptime(request.form['auctionTime'], '%Y-%m-%dT%H:%M')
-        if auctionTime.replace(tzinfo=None) - current_time.replace(tzinfo=None) < timedelta(days=1):
+        if auctionTime.replace(tzinfo=None) - current_time.replace(tzinfo=None) < timedelta(days=0):
             flash('Izsole nedrīkst notikt ātrāk par 24 stundām nākotnē!','error')
             errors += 1
     except ValueError:
@@ -240,7 +240,7 @@ def participatingIn():
     for transaction in userTransactions:
         if transaction.participating:
             listings += Listing.query.filter_by(id=transaction.listingID)
-    return render_template("pages/participatingIn.html", listings = listings)
+    return render_template("pages/participatingIn.html", listings = listings, id=listings[0].id)
 
 @listing.route("/db/refresh/get/<int:page>", methods=["GET"])
 def dbUpdate(page):
@@ -255,4 +255,21 @@ def dbUpdate(page):
             "auctionStatus": listing.auctionStatus,
             "price": listing.price,
         })
+    return jsonify(data)
+
+
+
+
+@listing.route("/db/refresh/get/specific/<int:id>", methods=["GET"])
+def dbUpdateSpecific(id):
+    listing = Listing.query.filter_by(id=id).first()
+    data = []
+    data.append({
+        "ident": listing.id,
+        "name": listing.name,
+        "description": listing.description,
+        "image": listing.image,
+        "auctionStatus": listing.auctionStatus,
+        "price": listing.price,
+    })
     return jsonify(data)

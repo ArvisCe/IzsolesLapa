@@ -124,7 +124,7 @@
     $(document).ready(function() {
     setInterval(function() {
         $.ajax({
-        url: "/prece/check_updates",
+        url: "/db/refresh/get/{{page}}",
         type: "GET",
         success: function(data) {
             // Update the page content with the new data

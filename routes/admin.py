@@ -43,9 +43,10 @@ def update_user(id):
     username = request.form["username"]
     name = request.form["name"]
     balance = request.form["balance"]
-    if User.query.filter_by(username=username).first():
-        flash("Nevar 2 lietotājiem būt 1 lietotājvārds! :D","error")
-        errors += 1
+    if username != user.username:
+        if User.query.filter_by(username=username):
+            flash("Nevar 2 lietotājiem būt 1 lietotājvārds! :D","error")
+            errors += 1
     
     if errors > 0:
         return redirect(url_for("admin.view_users"))

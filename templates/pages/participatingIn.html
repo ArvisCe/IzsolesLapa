@@ -83,20 +83,20 @@
             <div class="listingImage">
                 <img 
                 src="{{listing.image}}" 
-                id="image{{listing.id}}"
+                id="image"
                 width= "256px"
                 height = "256px"
                 style="object-fit: cover;">
             </div>
             <div class="listingInfo">
-                <h1 class="name" id="name{{listing.id}}">{{listing.name}}</h1>
-                <h3 class="description" id="description{{listing.id}}">{{listing.description}}</h3>
+                <h1 class="name" id="name">{{listing.name}}</h1>
+                <h3 class="description" id="description">{{listing.description}}</h3>
                 <hr>
-                <h3><span class="info">Sākuma cena: </span><span class="startPrice" id="startPrice{{listing.id}}">{{listing.startPrice}}</span></h3>
-                <h3><span class="info">Cena: </span><span class="price" id="price{{listing.id}}">{{listing.price}}</span></h3>
+                <h3><span class="info">Sākuma cena: </span><span class="startPrice" id="startPrice">{{listing.startPrice}}</span></h3>
+                <h3><span class="info">Cena: </span><span class="price" id="price">{{listing.price}}</span></h3>
                 <h3><span class="info">Izsoles statuss: 
                     
-                </span><span class="auctionDate" id="auctionStatus{{listing.id}}">
+                </span><span class="auctionDate" id="auctionStatus">
                     {% if listing.auctionStatus == 0 %}
                         izsole gaida
                     {% elif listing.auctionStatus == 1 %}
@@ -118,16 +118,16 @@
     $(document).ready(function() {
     setInterval(function() {
         $.ajax({
-        url: "{{url_for('listing.dbUpdate')}}",
+        url: "/prece/db/refresh/get/specific/{{id}}",
         type: "GET",    
         success: function(data) {
              $.each(data, function(index, listing) {
             var row = $("div[data-id='" + listing.id + "']");
-            if(document.getElementById("name"+listing.ident)){
-                document.getElementById("name"+listing.ident).innerHTML = listing.name;
-                document.getElementById("description"+listing.ident).innerHTML = listing.description;
-                document.getElementById("image"+listing.ident).src = listing.image; 
-                document.getElementById("price"+listing.ident).src = listing.price;
+            if(document.getElementById("name")){
+                document.getElementById("name").innerHTML = listing.name;
+                document.getElementById("description").innerHTML = listing.description;
+                document.getElementById("image").src = listing.image; 
+                document.getElementById("price").src = listing.price;
                 if(listing.auctionStatus === 0)
                 {
                     document.getElementById('auctionStatus'+listing.ident).innerHTML = "izsole gaida";
