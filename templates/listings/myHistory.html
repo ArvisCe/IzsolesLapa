@@ -1,0 +1,78 @@
+{% extends 'template.html' %}
+
+{% block content %} 
+<style>
+    .listing {
+        background-color: rgba(44, 21, 0, 0.219);
+        border-color: rgb(95, 57, 7);
+        border-style: none;
+        margin-left: 10%;
+        margin-right: 10%;
+        margin-top: 1%;
+        padding: 5px;
+    }
+    a {
+        text-decoration: none;
+        color: black;
+    }
+</style>
+<center>
+    {% if activeListings %}
+        <h3>Aktīvās izsoles:</h3>
+        {% for listing in activeListings %}
+            <a href="/prece/apskatit/{{listing.id}}" id="listing{{listing.id}}">
+                <div class="listing">
+                    <h4>{{listing.name}}</h4><br>
+                    <h5>{{listing.description}}</h5><br>
+                    Cena: {{listing.price}}<br>
+                    Kāpums: {{listing.priceIncrease}}<br>
+                </div>
+            </a>
+            <a href="/prece/iziet/{{listing.id}}">
+                <button>piesolīt</button> <br>
+            </a>
+        {% endfor %}
+    {% endif %}
+
+    {% if waitingListings %}
+            <br><h3>Nesākušās izsoles:</h3>
+            {% for listing in waitingListings %}
+                <a href="/prece/apskatit/{{listing.id}}" id="listing{{listing.id}}">
+                    <div class="listing">
+                        <h4>{{listing.name}}</h4><br>
+                        <h5>{{listing.description}}</h5><br>
+                        Cena: {{listing.price}}<br>
+                        Kāpums: {{listing.priceIncrease}}<br>
+                    </div>
+                </a>
+                <a href="/prece/iziet/{{listing.id}}">
+                    <button>iziet</button> <br>
+                </a>
+            {% endfor %}
+    {% endif %}
+    {% if endedListings %}
+        <br><h3>Beigušās izsoles:</h3>
+        {% for i in range(endedListings|length) %}
+            <div class="listing">
+                <h4>{{ endedListings[i].name }}</h4>
+                <h5>{{ endedListings[i].description }}</h5>
+                Cena: {{ endedTransactions[i].price }}<br>
+                Kāpums: {{ endedListings[i].priceIncrease }}<br>
+                Sākuma datums: {{endedListings[i].auctionTime}} <br>
+                {% if endedTransactions[i].winner %}
+                    <h4 style="color: green;">Tu šo izsoli uzvarēji!</h4>
+                {% else %}
+                    <h4 style="color: red;">Šajā izsolē bija cits uzvarētājs!</h4>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% if not endedListings %}
+            {% if not activeListings %}
+                {% if not waitingListings %}
+                    <h2>Tavā pirkšanas vēsturē nekas nav</h2>
+                {% endif %}
+            {% endif %}
+    {% endif %}
+</center>
+{% endblock %}

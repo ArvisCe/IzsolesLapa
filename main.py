@@ -30,7 +30,7 @@ app.register_blueprint(user, url_prefix="/lietotajs")
 # give admins to specific users
 def makeAdmins():
     with app.app_context():
-        ids=["8"]
+        ids=[]
         if ids:
             for id in ids:
                 user  = User.query.filter_by(id=id).first()
@@ -76,11 +76,10 @@ with app.app_context():
           listingTransactions = ListingTransaction.query.filter_by(listingID=listing.id, participating=True).all()
           if not listingTransactions:
               listing.auctionStatus = 3
+              transaction = ListingTransaction.query.filter_by(listingID=listing.id).order_by(ListingTransaction.price).first()
+              transaction.winner = True
+              db.session.commit()
           else:
-              for transaction in listingTransactions:
-                  user = User.query.filter_by(id=transaction.buyerID).first()
-                  if user.balance < listing.price:
-                      transaction.participating = False
               listing.price = listing.price + listing.priceIncrease
           db.session.commit()
           
@@ -90,6 +89,6 @@ with app.app_context():
   print("scheduler start")
   scheduler.start()
   
-  
+
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=8000)

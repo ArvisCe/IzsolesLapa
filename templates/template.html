@@ -172,15 +172,12 @@
             <a class="link" href="{{url_for('home.index')}}">
                 Izsoles
             </a>
-            <a class="link" href="{{url_for('home.history')}}">
-                Vēsture
-            </a>
             {% if current_user.name %}
                 <a class="link" href="{{url_for('listing.new')}}">
                     Ievietot
                 </a>
-                <a class="link" href="{{url_for('listing.myListings')}}">
-                    Ievietojumi
+                <a class="link" href="{{url_for('listing.myHistory')}}">
+                    Pirkumi
                 </a>
 
                 <a class="linkleft" href="/logout">
@@ -188,9 +185,6 @@
                 </a>
                 <a class="linkleft" href="{{url_for('user.profile')}}">
                     Profils
-                </a>
-                <a class="profileInfo">
-                    {{current_user.balance}}€
                 </a>
                 <a class="profileInfo">
                     {{current_user.username}}

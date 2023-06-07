@@ -1,5 +1,5 @@
 import time
-from flask import Flask
+from flask import Flask, render_template
 from models import db, User, LoginManager, Bcrypt, Listing, ListingTransaction, pytz
 from datetime import timedelta, datetime
 from routes.authentication import auth
@@ -26,5 +26,8 @@ def load_user(user_id):
   return User.query.get(int(user_id))
 
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
 
 

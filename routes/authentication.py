@@ -78,7 +78,6 @@ def register():
             isVerified = False,
             isDeleted = False,
             isAdmin = False,
-            balance=0.00,
         )
         db.session.add(new_user)
         db.session.commit()

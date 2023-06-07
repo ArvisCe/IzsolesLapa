@@ -173,6 +173,7 @@ def join(id):
         current_time = datetime.now(latvia_timezone)
         newTransaction = ListingTransaction(
             price = listing.price,
+            marked = False,
             participating = True,
             buyerID = current_user.id,
             listingID = id,
@@ -181,7 +182,8 @@ def join(id):
         )
         db.session.add(newTransaction)
         db.session.commit()
-        return redirect(url_for("listing.auction",id=id))
+        flash('veiksmīgi pievienojies izsolei!','success')
+        return redirect(url_for("listing.myHistory",id=id))
 
 @listing.route("/iziet/<int:id>")
 def exit(id):
@@ -200,7 +202,7 @@ def exit(id):
         userTransaction.date = current_time
     db.session.commit()
     flash("veiksmīgi esi izstājies no izsoles!","success")
-    return redirect(url_for("home.index"))
+    return redirect(url_for("listing.myHistory"))
 
 @listing.route("/izsole/<int:id>")
 def auction(id):
@@ -220,27 +222,33 @@ def auction(id):
     
     return redirect(url_for("listing.participatingIn"))
 
-@listing.route("/manas")
-def myListings():
-    if not current_user:
-        flash('Tev jāreģistrējas, lai redzētu savas izsoles!','error')
-        return redirect(url_for("home.index"))
-    
-    return render_template("listings/myListings.html", listings = Listing.query.filter_by(userID=current_user.id).all())
 
-
-@listing.route("/piedalos")
-def participatingIn():
+@listing.route("/vesture")
+def myHistory():
     if not current_user:
-        flash('Tev jāreģistrējas, lai pievienotos izsolei!','error')
+        flash('Reģistrējies vai pieslēdzies, lai apskatītu savu vēsturi!', 'error')
         return redirect(url_for("home.index"))
-    
-    listings = []
-    userTransactions = ListingTransaction.query.filter_by(buyerID=current_user.id).all()
-    for transaction in userTransactions:
-        if transaction.participating:
-            listings += Listing.query.filter_by(id=transaction.listingID)
-    return render_template("pages/participatingIn.html", listings = listings, id=listings[0].id)
+    activeListings = []
+    endedListings = []
+    endedTransactions = []
+    waitingListings = []
+    transactions = ListingTransaction.query.filter_by(buyerID=current_user.id).all()
+    for transaction in transactions:
+        listing = Listing.query.filter_by(id=transaction.listingID).first()
+        if listing.auctionStatus == 0:
+            print("found auction")
+            waitingListings.append(listing)
+        elif listing.auctionStatus == 1 or listing.auctionStatus == 2:
+            activeListings.append(listing)
+        else:
+            endedListings.append(listing)
+            endedTransactions.append(transaction)
+
+    return render_template("listings/myHistory.html", 
+                           activeListings = activeListings,
+                           endedListings = endedListings,
+                           waitingListings = waitingListings,
+                           endedTransactions = endedTransactions)
 
 @listing.route("/db/refresh/get/<int:page>", methods=["GET"])
 def dbUpdate(page):
@@ -254,6 +262,7 @@ def dbUpdate(page):
             "image": listing.image,
             "auctionStatus": listing.auctionStatus,
             "price": listing.price,
+            "user": listing.userID,
         })
     return jsonify(data)
 
@@ -271,5 +280,6 @@ def dbUpdateSpecific(id):
         "image": listing.image,
         "auctionStatus": listing.auctionStatus,
         "price": listing.price,
+        "user": listing.userID,
     })
     return jsonify(data)
