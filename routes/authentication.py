@@ -58,8 +58,11 @@ def register():
         if User.query.filter_by(username=username).first():
             flash('Lietotājs ar šādu lietotājvārdu jau eksistē!','error')
             Errors += 1
-        if User.query.filter_by(phone=phone).first():
-            flash('Lietotājs ar šādu telefona numuru jau ir reģistrēts! '+phone, 'error')
+        if User.query.filter_by(phone=phone[-8:]).first():
+            flash('Lietotājs ar šādu telefona numuru jau ir reģistrēts! '+phone[-8:], 'error')
+            Errors += 1
+        if not check_phone_number(phone):
+            flash('Nav ievadīts derīgs telefona numurs!','error')
             Errors += 1
         if Errors > 0:
             return redirect(url_for("auth.register"))
@@ -73,7 +76,7 @@ def register():
             name = name,
             surname = surname,
             verificationCode = generatePhoneVerification(),
-            phone = phone,
+            phone = phone[-8:],
             createdOn = current_time,
             isVerified = False,
             isDeleted = False,
@@ -99,19 +102,38 @@ def logout():
 def checkCode():
     return "<h1>"+generatePhoneVerification()+"</h1>"
 
+
+@auth.route("/verify",methods=["POST"])
+def verify():
+    code = request.form['code']
+    if code == current_user.verificationCode:
+        current_user.isVerified = True
+        db.session.commit()
+        flash('veiksmīgi esi verificējies!','success')
+    else:
+        flash('verifikācija neizdevusies, pārbaudi verifikācijas koda pareizību','error')
+    return redirect(url_for("user.profile"))
+
+
 def generatePhoneVerification():
   code = ""
-  for i in range(4):
-      for j in range(5):
+  for i in range(3):
+      for j in range(4):
           if random.randint(0,1) == 1:
               randomSymbol = random.randint(65,90)
               code += chr(randomSymbol)
           else:
               randomSymbol = random.randint(97, 122)
               code += chr(randomSymbol)            
-      if not i == 3:
-          code += "-"
   CodeAlreadyExists = User.query.filter_by(verificationCode=code).first()
   if CodeAlreadyExists:
     code = generatePhoneVerification()
   return code    
+
+def check_phone_number(number):
+    if len(number) == 12 or len(number) == 11:
+        number = number[-8:]
+    if len(number) == 8:
+        return True
+    else:
+        return False

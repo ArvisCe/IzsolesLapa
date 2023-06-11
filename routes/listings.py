@@ -8,6 +8,12 @@ listing = Blueprint("listing", __name__, static_folder="static", template_folder
 
 @listing.route("/jauna", methods=["GET","POST"])
 def new():
+    if not current_user.is_authenticated:
+        flash('Lai ievietotu preci vajag reģistrēties!','error')
+        return redirect(url_for("auth.register"))
+    if not current_user.isVerified:
+        flash("Lai ievietotu preci vajag apstiprināt verifikācijas kodu telefonā!",'error')
+        return redirect(url_for("user.profile"))
     if request.method == "GET":
         return render_template("listings/new.html")
         
@@ -157,6 +163,12 @@ def dzest(id):
 
 @listing.route("/pievienoties/<int:id>")
 def join(id):
+    if not current_user.is_authenticated:
+        flash('Lai pievienotos izsolei vajag reģistrēties!','error')
+        return redirect(url_for("auth.register"))
+    if not current_user.isVerified:
+        flash("Lai pievienotos izsolei vajag apstiprināt verifikācijas kodu telefonā!",'error')
+        return redirect(url_for("user.profile"))
     listing = Listing.query.filter_by(id=id).first()
     if listing.auctionStatus != 1:
         flash('Izsolei vairs nevar pievienoties!','error')

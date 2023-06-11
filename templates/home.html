@@ -12,7 +12,6 @@
     {
         text-decoration: none;
         color: #ADA8BE;
-        line-height: 0.8;
     }
     .listing
     {
@@ -98,7 +97,6 @@
 
 {% block content %} 
     
-<!--img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"--></center>
 <center>
     {% for number in range(1, pageAmount) %}
         {% if number == page + 1 %}
@@ -156,6 +154,7 @@
             {% endif %}
         {% endfor %}
     </div>
+</center>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).ready(function() {

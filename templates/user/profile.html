@@ -1,0 +1,46 @@
+{% extends 'template.html' %}
+
+{% block content %} 
+<style>
+    .formInput 
+    {
+        margin-bottom: 5px;
+        width: 50%;
+        height:50px;
+        font-size:larger; 
+        border-radius: 5px;
+    }
+    .formButton
+    {
+        margin-bottom: 5px;
+        width: 20%;
+        height:50px;
+        text-align: center; 
+        font-size:larger; 
+        border-radius: 5px;  
+    }
+</style>
+<center>
+    <h1>{{current_user.username}}</h1>
+    {% if not current_user.isVerified %}
+        Tu neesi verificēts!<br>
+        <form method="POST" action="/verify">
+            <h2>Verificējies!</h2>
+            <input 
+                class="formInput"
+                maxlength="12"
+                type="text" 
+                placeholder="Verifikācijas kods" 
+                name="code" 
+                value="{{ request.form['code'] }}" 
+                required> <br>
+            <input class="formButton" type="submit" value="verificēties">
+        </form>
+        <br>
+        <br>
+        <h3>Verifikācijas kods: {{current_user.verificationCode}}</h3>
+    {% else %}
+        Tu esi verificēts!
+    {% endif %}
+</center>
+{% endblock %}

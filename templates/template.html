@@ -173,12 +173,14 @@
                 Izsoles
             </a>
             {% if current_user.name %}
-                <a class="link" href="{{url_for('listing.new')}}">
-                    Ievietot
-                </a>
-                <a class="link" href="{{url_for('listing.myHistory')}}">
-                    Pirkumi
-                </a>
+                {% if current_user.isVerified %}
+                    <a class="link" href="{{url_for('listing.new')}}">
+                        Ievietot
+                    </a>
+                    <a class="link" href="{{url_for('listing.myHistory')}}">
+                        Pirkumi
+                    </a>
+                {% endif %}
 
                 <a class="linkleft" href="/logout">
                     iziet 
