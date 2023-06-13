@@ -76,8 +76,6 @@ with app.app_context():
           listingTransactions = ListingTransaction.query.filter_by(listingID=listing.id, participating=True).all()
           if not listingTransactions:
               listing.auctionStatus = 3
-              transaction = ListingTransaction.query.filter_by(listingID=listing.id, participating=True).first()
-              transaction.winner = True
               db.session.commit()
           else:
               listing.price = listing.price + listing.priceIncrease / 10

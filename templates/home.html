@@ -25,6 +25,7 @@
         width: 80%;
         height: 256px;
         margin-top: 5%;
+        height: 150%;
     }
 
     hr
@@ -46,11 +47,14 @@
     .listingInfo
     {
         overflow: hidden; 
-        margin-left: 356px;
+        padding-left: 2vw;
+        padding-bottom: 1vh;
         text-align:left;
         text-decoration: none;
     }
-
+    .name {
+        margin-top: 0px;
+    }
     .startPrice
     {
         color: #A28497;
@@ -78,6 +82,8 @@
     .description
     {
         word-break:keep-all;
+        padding-bottom: 5px;
+        border-bottom: 1px solid rgb(150, 150, 150);
     }
     .joinAuction
     {
@@ -143,7 +149,6 @@
                     {% else %}
                         <h3 class="description" id="description{{listing.id}}">{{listing.description[:50]}}</h3>
                     {% endif %}       
-                    <hr>
                     <h3><span class="info">Sākuma cena: </span><span class="startPrice" id="startPrice{{listing.id}}">{{listing.startPrice}}</span></h3>
                     <h3><span class="info">Cenas kāpums: </span><span class="priceIncrease" id="priceIncrease{{listing.id}}">{{listing.priceIncrease}}</span></h3>
                     <h3><span class="Date">Izsoles laiks: {{listing.auctionTime}}</span></h3>

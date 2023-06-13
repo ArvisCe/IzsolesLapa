@@ -176,9 +176,9 @@ def join(id):
     if listing.userID == current_user.id:
         flash('Savai izsolei nevar pievienoties!','error')
         return redirect("/prece/apskatit/"+str(listing.id))
-    if ListingTransaction.query.filter_by(buyerID=current_user.id,listingID=id).first():
+    if ListingTransaction.query.filter_by(buyerID=current_user.id,listingID=listing.id).first():
         redirect(url_for("listing.myHistory",id=id))
-    if not current_user:
+    if not current_user.is_authenticated:
         flash('lai pievienotos izsolei jābūt reģistrētam lietotājam!','error')
     else:
         latvia_timezone = pytz.timezone('Europe/Riga')
@@ -211,8 +211,12 @@ def exit(id):
 
         userTransaction.participating = False
         userTransaction.price = listing.price
-        userTransaction.date = current_time
+        userTransaction.date = current_time    
     db.session.commit()
+    transaction = ListingTransaction.query.filter_by(listingID=listing.id, participating=True).first()
+    if not transaction:
+        userTransaction.winner  = True
+        db.session.commit()
     flash("veiksmīgi esi izstājies no izsoles!","success")
     return redirect(url_for("listing.myHistory"))
 
@@ -237,13 +241,14 @@ def auction(id):
 
 @listing.route("/vesture")
 def myHistory():
-    if not current_user:
+    if not current_user.is_authenticated:
         flash('Reģistrējies vai pieslēdzies, lai apskatītu savu vēsturi!', 'error')
         return redirect(url_for("home.index"))
     activeListings = []
     endedListings = []
     endedTransactions = []
     waitingListings = []
+    ids = []
     transactions = ListingTransaction.query.filter_by(buyerID=current_user.id).all()
     for transaction in transactions:
         listing = Listing.query.filter_by(id=transaction.listingID).first()
@@ -254,9 +259,9 @@ def myHistory():
         else:
             endedListings.append(listing)
             endedTransactions.append(transaction)
-        ids = []
         for activeListing in activeListings:
             ids.append(activeListing.id)
+        
     return render_template("listings/myHistory.html", 
                            activeListings = activeListings,
                            endedListings = endedListings,
