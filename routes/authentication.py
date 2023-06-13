@@ -61,6 +61,9 @@ def register():
         if User.query.filter_by(phone=phone[-8:]).first():
             flash('Lietotājs ar šādu telefona numuru jau ir reģistrēts! '+phone[-8:], 'error')
             Errors += 1
+        if not phone.isnumeric():
+            flash('Telefona numurs nedrīkst saturēt simbolus, burtus!','error')
+            Errors += 1
         if not check_phone_number(phone):
             flash('Nav ievadīts derīgs telefona numurs!','error')
             Errors += 1
