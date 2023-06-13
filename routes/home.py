@@ -13,9 +13,9 @@ home = Blueprint("home", __name__, static_folder="static", template_folder="temp
 def index(page=1):
     page -= 1
     return render_template('home.html', 
-                           listings=Listing.query.filter(Listing.auctionStatus.notin_([3])).order_by(Listing.auctionTime.asc()).offset(page*6).limit(6).all(),
+                           listings=Listing.query.filter(Listing.auctionStatus.notin_([2,3])).order_by(Listing.auctionTime.asc()).offset(page*6).limit(6).all(),
                            page=page,
-                           pageAmount=math.ceil(Listing.query.filter(Listing.auctionStatus.notin_([3])).count()/6)+1,
+                           pageAmount=math.ceil(Listing.query.filter(Listing.auctionStatus.notin_([2,3])).count()/6)+1,
                            )
 
 @home.route("/noteikumi")

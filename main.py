@@ -76,16 +76,16 @@ with app.app_context():
           listingTransactions = ListingTransaction.query.filter_by(listingID=listing.id, participating=True).all()
           if not listingTransactions:
               listing.auctionStatus = 3
-              transaction = ListingTransaction.query.filter_by(listingID=listing.id).order_by(ListingTransaction.price).first()
+              transaction = ListingTransaction.query.filter_by(listingID=listing.id, participating=True).first()
               transaction.winner = True
               db.session.commit()
           else:
-              listing.price = listing.price + listing.priceIncrease
+              listing.price = listing.price + listing.priceIncrease / 10
           db.session.commit()
           
   scheduler = BackgroundScheduler()
-  scheduler.add_job(update_auction_status,'interval',seconds=1)
-  scheduler.add_job(makeAdmins,'interval',seconds=1)
+  scheduler.add_job(update_auction_status,'interval',seconds=0.1)
+  makeAdmins()
   print("scheduler start")
   scheduler.start()
   

@@ -12,8 +12,8 @@
         padding: 5px;
     }
     a {
-        text-decoration: none;
-        color: black;
+        text-decoration: none; 
+        color: inherit;     
     }
 </style>
 <center>
@@ -24,8 +24,8 @@
                 <div class="listing">
                     <h4>{{listing.name}}</h4><br>
                     <h5>{{listing.description}}</h5><br>
-                    Cena: {{listing.price}}<br>
-                    Kāpums: {{listing.priceIncrease}}<br>
+                    <span id="Price{{listing.id}}">Cena: {{"%.2f"|format(listing.price|float)}}</span><br>
+                    Kāpums: {{"%.2f"|format(listing.priceIncrease|float)}}<br>
                 </div>
             </a>
             <a href="/prece/iziet/{{listing.id}}">
@@ -41,8 +41,8 @@
                     <div class="listing">
                         <h4>{{listing.name}}</h4><br>
                         <h5>{{listing.description}}</h5><br>
-                        Cena: {{listing.price}}<br>
-                        Kāpums: {{listing.priceIncrease}}<br>
+                        Cena: {{"%.2f"|format(listing.price|float)}}<br>
+                        Kāpums: {{"%.2f"|format(listing.priceIncrease|float)}}<br>
                     </div>
                 </a>
                 <a href="/prece/iziet/{{listing.id}}">
@@ -56,8 +56,7 @@
             <div class="listing">
                 <h4>{{ endedListings[i].name }}</h4>
                 <h5>{{ endedListings[i].description }}</h5>
-                Cena: {{ endedTransactions[i].price }}<br>
-                Kāpums: {{ endedListings[i].priceIncrease }}<br>
+                Cena: {{"%.2f"|format(endedTransactions[i].price|float)}}<br>
                 Sākuma datums: {{endedListings[i].auctionTime}} <br>
                 {% if endedTransactions[i].winner %}
                     <h4 style="color: green;">Tu šo izsoli uzvarēji!</h4>
@@ -75,4 +74,28 @@
             {% endif %}
     {% endif %}
 </center>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $(document).ready(function() {
+    setInterval(function() {
+        {{ids}}.forEach(id =>
+            $.ajax({
+            url: "/prece/db/refresh/get/specific/"+id,
+            type: "GET", 
+            success: function(data) {
+                $.each(data, function(index, listing) {
+                var row = $("div[data-id='" + listing.id + "']");
+                if(document.getElementById("Price"+listing.ident)){
+                    var price = Math.round(listing.price * 100) / 100; // Round to 2 decimal places
+                    if (price % 1 === 0) {
+                    price = price.toFixed(2); // Add trailing zeros for whole numbers
+                    }
+                    document.getElementById("Price" + listing.ident).innerHTML = "Cena: " + price;
+                }           
+                });
+            }
+            }));
+    }, 100);
+    });
+</script>
 {% endblock %}

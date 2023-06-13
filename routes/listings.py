@@ -177,7 +177,7 @@ def join(id):
         flash('Savai izsolei nevar pievienoties!','error')
         return redirect("/prece/apskatit/"+str(listing.id))
     if ListingTransaction.query.filter_by(buyerID=current_user.id,listingID=id).first():
-        redirect(url_for("listing.auction",id=id))
+        redirect(url_for("listing.myHistory",id=id))
     if not current_user:
         flash('lai pievienotos izsolei jābūt reģistrētam lietotājam!','error')
     else:
@@ -248,19 +248,21 @@ def myHistory():
     for transaction in transactions:
         listing = Listing.query.filter_by(id=transaction.listingID).first()
         if listing.auctionStatus == 0:
-            print("found auction")
             waitingListings.append(listing)
-        elif listing.auctionStatus == 1 or listing.auctionStatus == 2:
+        elif listing.auctionStatus == 1 or listing.auctionStatus == 2 and transaction.participating: 
             activeListings.append(listing)
         else:
             endedListings.append(listing)
             endedTransactions.append(transaction)
-
+        ids = []
+        for activeListing in activeListings:
+            ids.append(activeListing.id)
     return render_template("listings/myHistory.html", 
                            activeListings = activeListings,
                            endedListings = endedListings,
                            waitingListings = waitingListings,
-                           endedTransactions = endedTransactions)
+                           endedTransactions = endedTransactions,
+                           ids = ids)
 
 @listing.route("/db/refresh/get/<int:page>", methods=["GET"])
 def dbUpdate(page):

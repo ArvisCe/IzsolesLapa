@@ -3,7 +3,13 @@
 
 <!-- title -->
 
-{% block title %} Izsoles {% endblock %}
+{% block title %} 
+
+    {% if listing %}
+    Izsoles
+    {% endif %}
+
+{% endblock %}
 
 {% block heading %}
 
@@ -98,6 +104,19 @@
 {% block content %} 
     
 <center>
+    {% if not listing %}
+     <h2>Nav publicēta neviena izsole!</h2>
+        {% if current_user.name %}
+            <h3>Publicē savējo
+                <a style="color:#0645AD;"href="{{url_for('listing.new')}}">šeit!</a>
+            </h3>
+        {% else %}
+            <h3>
+                <a style="color:#0645AD;" href="{{url_for('auth.register')}}">Pievienojies</a>
+                 un publicē savējo!
+            </h3>
+        {% endif %}
+    {% endif %}
     {% for number in range(1, pageAmount) %}
         {% if number == page + 1 %}
             <a style="color:#691069; text-decoration: underline;" href="/izsoles/{{number}}">{{number}}</a>
