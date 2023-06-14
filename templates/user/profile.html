@@ -42,5 +42,28 @@
     {% else %}
         Tu esi verificēts!
     {% endif %}
+    <hr style="width: 60%;">
+
+    <h2>Mani ievietojumi</h2>
+    {% if ongoingListings %}
+        <h3>Šobrīd tiek izsolīts</h3>
+        {% for listing in ongoingListings %}
+            {{listing.name}}
+        {% endfor %}
+    {% endif %}
+
+    {% if waitingListings %}
+        <h3>Izsoles kas gaida</h3>
+        {% for listing in waitingListings %}
+            {{listing.name}}
+        {% endfor %}
+    {% endif %}
+
+    {% if endedListings %}
+    <h3>Beigušās izsoles</h3>
+        {% for listing in endedListings %}
+            {{listing.name}}
+        {% endfor %}
+    {% endif %}
 </center>
 {% endblock %}

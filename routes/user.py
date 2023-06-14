@@ -7,5 +7,13 @@ def profile():
     if not current_user.is_authenticated:
         flash("Tikai pieslēgti lietotāji var apskatīt savu profilu!",'error')
         return redirect(url_for("home.index"))
-    
-    return render_template("user/profile.html")
+    ongoing = []
+    for listing in Listing.query.filter_by(userID=current_user.id, auctionStatus=2).all():
+        ongoing.append(listing)
+    for listing in Listing.query.filter_by(userID=current_user.id, auctionStatus=1).all():
+        ongoing.append(listing)
+    return render_template("user/profile.html", 
+                           waitingListings = Listing.query.filter_by(userID=current_user.id, auctionStatus=0).all(),
+                           ongoingListings = ongoing,
+                           endedListings = Listing.query.filter_by(userID=current_user.id, auctionStatus=3).all()
+                           )

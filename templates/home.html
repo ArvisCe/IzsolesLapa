@@ -5,7 +5,7 @@
 
 {% block title %} 
 
-    {% if listing %}
+    {% if listings %}
     Izsoles
     {% endif %}
 
@@ -110,7 +110,7 @@
 {% block content %} 
     
 <center>
-    {% if not listing %}
+    {% if not listings %}
      <h2>Nav publicēta neviena izsole!</h2>
         {% if current_user.name %}
             <h3>Publicē savējo
