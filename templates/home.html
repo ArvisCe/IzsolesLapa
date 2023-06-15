@@ -199,13 +199,7 @@
                     var listingInfo = document.createElement("div");
                     listingInfo.classList.add("listing-info");
     
-                    // Listing image
-                    var listingImage = document.createElement("img");
-                    listingImage.src = "{{listing.image}}";
-                    listingImage.width = "256px";
-                    listingImage.height = "256px";
-                    listingImage.style.objectFit = "cover";
-                    listingInfo.appendChild(listingImage);
+
     
                     // Listing name
                     var listingName = document.createElement("h1");
@@ -219,6 +213,14 @@
                     listingDescription.textContent = "{{listing.description}}";
                     listingInfo.appendChild(listingDescription);
     
+                    // Listing image
+                    var listingImage = document.createElement("img");
+                    listingImage.src = "{{listing.image}}";
+                    listingImage.style.width = "256px";
+                    listingImage.style.height = "256px";
+                    listingImage.style.objectFit = "cover";
+                    listingInfo.appendChild(listingImage);
+
                     overlay.appendChild(listingInfo);
                     document.body.appendChild(overlay);
     
