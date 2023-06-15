@@ -101,6 +101,25 @@
     {
         background-color:#0e388b;
     }
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .listing-info {
+        background-color: white;
+        padding: 20px;
+        max-width: 500px;
+        border-radius: 5px;
+        text-align: center;
+      }
 </style>
 
 {% endblock %}
@@ -131,7 +150,7 @@
         {% endif %}
     {% endfor %}
     {% for listing in listings %}
-        <a href="/prece/apskatit/{{listing.id}}" id="listing"{{listing.id}}>
+        <a id="listing"{{listing.id}}>
             <div class="listing">
                 <div class="listingImage">
                     <img 
@@ -179,6 +198,26 @@
         {% endfor %}
     </div>
 </center>
+<script>
+    document.getElementById("listing{{listing.id}}").addEventListener("click", function() {
+      var overlay = document.createElement("div");
+      overlay.id = "overlay{{listing.id}}";
+      overlay.classList.add("overlay");
+    
+      var listingInfo = document.createElement("div");
+      listingInfo.classList.add("listing-info");
+    
+      overlay.appendChild(listingInfo);
+      document.body.appendChild(overlay);
+    
+      overlay.addEventListener("click", function(e) {
+        if (e.target === overlay) {
+          document.body.removeChild(overlay);
+        }
+      });
+    });
+    </script>
+    
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).ready(function() {
