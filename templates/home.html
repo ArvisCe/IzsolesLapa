@@ -187,6 +187,25 @@
                 </div>
             </div>
         </a> <br>
+        <script>
+            document.getElementById("listing{{listing.id}}").addEventListener("click", function() {
+              var overlay = document.createElement("div");
+              overlay.id = "overlay{{listing.id}}";
+              overlay.classList.add("overlay");
+            
+              var listingInfo = document.createElement("div");
+              listingInfo.classList.add("listing-info");
+            
+              overlay.appendChild(listingInfo);
+              document.body.appendChild(overlay);
+            
+              overlay.addEventListener("click", function(e) {
+                if (e.target === overlay) {
+                  document.body.removeChild(overlay);
+                }
+              });
+            });
+        </script>
     {% endfor %}
     <div style="margin-top: 5%;">
         {% for number in range(1, pageAmount) %}
@@ -198,25 +217,7 @@
         {% endfor %}
     </div>
 </center>
-<script>
-    document.getElementById("listing{{listing.id}}").addEventListener("click", function() {
-      var overlay = document.createElement("div");
-      overlay.id = "overlay{{listing.id}}";
-      overlay.classList.add("overlay");
-    
-      var listingInfo = document.createElement("div");
-      listingInfo.classList.add("listing-info");
-    
-      overlay.appendChild(listingInfo);
-      document.body.appendChild(overlay);
-    
-      overlay.addEventListener("click", function(e) {
-        if (e.target === overlay) {
-          document.body.removeChild(overlay);
-        }
-      });
-    });
-    </script>
+
     
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
