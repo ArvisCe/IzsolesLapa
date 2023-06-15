@@ -189,29 +189,49 @@
         </a> <br>
     {% endfor %}
     <script>
-        // Move the JavaScript code here
         document.addEventListener("DOMContentLoaded", function() {
             {% for listing in listings %}
                 document.getElementById("listing{{listing.id}}").addEventListener("click", function() {
                     var overlay = document.createElement("div");
                     overlay.id = "overlay{{listing.id}}";
                     overlay.classList.add("overlay");
-                    
+    
                     var listingInfo = document.createElement("div");
                     listingInfo.classList.add("listing-info");
-                    
+    
+                    // Listing image
+                    var listingImage = document.createElement("img");
+                    listingImage.src = "{{listing.image}}";
+                    listingImage.width = "256px";
+                    listingImage.height = "256px";
+                    listingImage.style.objectFit = "cover";
+                    listingInfo.appendChild(listingImage);
+    
+                    // Listing name
+                    var listingName = document.createElement("h1");
+                    listingName.classList.add("name");
+                    listingName.textContent = "{{listing.name}}";
+                    listingInfo.appendChild(listingName);
+    
+                    // Listing description
+                    var listingDescription = document.createElement("h3");
+                    listingDescription.classList.add("description");
+                    listingDescription.textContent = "{{listing.description}}";
+                    listingInfo.appendChild(listingDescription);
+    
                     overlay.appendChild(listingInfo);
                     document.body.appendChild(overlay);
-                    
+    
                     overlay.addEventListener("click", function(e) {
                         if (e.target === overlay) {
-                        document.body.removeChild(overlay);
+                            document.body.removeChild(overlay);
                         }
                     });
-                    });
+                });
             {% endfor %}
         });
     </script>
+    
     <div style="margin-top: 5%;">
         {% for number in range(1, pageAmount) %}
             {% if number == page + 1 %}
