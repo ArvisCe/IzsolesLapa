@@ -150,7 +150,7 @@
         {% endif %}
     {% endfor %}
     {% for listing in listings %}
-        <a id="listing"{{listing.id}}>
+        <a id="listing{{listing.id}}">
             <div class="listing">
                 <div class="listingImage">
                     <img 
@@ -187,26 +187,31 @@
                 </div>
             </div>
         </a> <br>
-        <script>
-            document.getElementById("listing{{listing.id}}").addEventListener("click", function() {
-              var overlay = document.createElement("div");
-              overlay.id = "overlay{{listing.id}}";
-              overlay.classList.add("overlay");
-            
-              var listingInfo = document.createElement("div");
-              listingInfo.classList.add("listing-info");
-            
-              overlay.appendChild(listingInfo);
-              document.body.appendChild(overlay);
-            
-              overlay.addEventListener("click", function(e) {
-                if (e.target === overlay) {
-                  document.body.removeChild(overlay);
-                }
-              });
-            });
-        </script>
     {% endfor %}
+    <script>
+        // Move the JavaScript code here
+        document.addEventListener("DOMContentLoaded", function() {
+            {% for listing in listings %}
+                document.getElementById("listing{{listing.id}}").addEventListener("click", function() {
+                    var overlay = document.createElement("div");
+                    overlay.id = "overlay{{listing.id}}";
+                    overlay.classList.add("overlay");
+                    
+                    var listingInfo = document.createElement("div");
+                    listingInfo.classList.add("listing-info");
+                    
+                    overlay.appendChild(listingInfo);
+                    document.body.appendChild(overlay);
+                    
+                    overlay.addEventListener("click", function(e) {
+                        if (e.target === overlay) {
+                        document.body.removeChild(overlay);
+                        }
+                    });
+                    });
+            {% endfor %}
+        });
+    </script>
     <div style="margin-top: 5%;">
         {% for number in range(1, pageAmount) %}
             {% if number == page + 1 %}
