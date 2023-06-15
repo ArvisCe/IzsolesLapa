@@ -191,7 +191,6 @@
             var row = $("div[data-id='" + listing.id + "']");
             if(document.getElementById("name"+listing.ident)){
                 document.getElementById("name"+listing.ident).innerHTML = listing.name;
-                document.getElementById("description"+listing.ident).innerHTML = listing.description;
                 document.getElementById("image"+listing.ident).src = listing.image;
                 var username = '{{current_user.username}}';
                 var id = '{{current_user.id}}';
