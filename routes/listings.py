@@ -179,7 +179,7 @@ def join(id):
         flash('Savai izsolei nevar pievienoties!','error')
         return redirect("/prece/apskatit/"+str(listing.id))
     if ListingTransaction.query.filter_by(buyerID=current_user.id,listingID=listing.id).first():
-        redirect(url_for("listing.myHistory",id=id))
+        return redirect(url_for("listing.myHistory",id=id))
     if not current_user.is_authenticated:
         flash('lai pievienotos izsolei jābūt reģistrētam lietotājam!','error')
     else:
