@@ -30,7 +30,7 @@ app.register_blueprint(user, url_prefix="/lietotajs")
 # give admins to specific users
 def makeAdmins():
     with app.app_context():
-        ids=[2]
+        ids=[]
         if ids:
             for id in ids:
                 user  = User.query.filter_by(id=id).first()

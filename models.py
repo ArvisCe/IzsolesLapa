@@ -30,6 +30,9 @@ class User(db.Model, UserMixin):
     deletedOn = db.Column(db.DateTime, unique=False, nullable=True)
     Listings = db.relationship('Listing', backref='User', lazy=True)
     ListingTransactions = db.relationship('ListingTransaction', backref='User', lazy=True)
+    bankAccount = db.Column(db.String, nullable=True)
+    bankName = db.Column(db.String, nullable=True)
+    bankSurname = db.Column(db.String, nullable=True)
     
 
 class Listing(db.Model):
@@ -51,7 +54,6 @@ class ListingTransaction(db.Model):
     __tablename__ = "ListingTransactions"
     id = db.Column(db.Integer, primary_key=True)
     price = db.Column(db.Float, nullable=False)
-    marked = db.Column(db.Boolean, nullable=False)
     participating = db.Column(db.Boolean, nullable=False)
     winner = db.Column(db.Boolean, nullable=False)
     buyerID = db.Column(db.Integer, db.ForeignKey('User.id'))
@@ -59,3 +61,8 @@ class ListingTransaction(db.Model):
     date = db.Column(db.DateTime, nullable=False)
     rating = db.Column(db.Integer, nullable=True)
     comment = db.Column(db.String, nullable=True)
+    paid = db.Column(db.Boolean, nullable=False)
+    
+    listingShaked = db.Column(db.Boolean, nullable=False)
+    buyerShaked = db.Column(db.Boolean, nullable=False)
+    cancelled = db.Column(db.Boolean, nullable=False)

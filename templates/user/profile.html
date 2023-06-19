@@ -1,5 +1,8 @@
 {% extends 'template.html' %}
 
+
+{% block profils %}active{% endblock %}
+
 {% block content %} 
 <style>
     .formInput 
@@ -45,10 +48,15 @@
     <hr style="width: 60%;">
 
     <h2>Mani ievietojumi</h2>
+    {% if not ongoingListings and not waitingListings and not endedListings %}
+        <h3>Tu vēl neko neesi ievietojis!</h3>
+    {% endif %}
     {% if ongoingListings %}
         <h3>Šobrīd tiek izsolīts</h3>
         {% for listing in ongoingListings %}
             {{listing.name}}
+            {{listing.startingPrice}}
+            {{listing.price}}
         {% endfor %}
     {% endif %}
 
@@ -56,6 +64,8 @@
         <h3>Izsoles kas gaida</h3>
         {% for listing in waitingListings %}
             {{listing.name}}
+            {{listing.startingPrice}}
+            {{listing.price}}
         {% endfor %}
     {% endif %}
 

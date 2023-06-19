@@ -1,8 +1,10 @@
-from flask import jsonify, Blueprint, render_template, request, redirect, flash, url_for
+from flask import jsonify, Blueprint, render_template, request, redirect, flash, url_for, make_response
 from datetime import timedelta, datetime
 from models import Listing, db, current_user, ListingTransaction, pytz
 import os
 import uuid
+from reportlab.pdfgen import canvas
+import random
 
 listing = Blueprint("listing", __name__, static_folder="static", template_folder="templates")
 
@@ -185,12 +187,15 @@ def join(id):
         current_time = datetime.now(latvia_timezone)
         newTransaction = ListingTransaction(
             price = listing.price,
-            marked = False,
             participating = True,
             buyerID = current_user.id,
             listingID = id,
             date = current_time,
             winner = False,
+            paid = False,
+            listingShaked = False,
+            buyerShaked = False,
+            cancelled = False,
         )
         db.session.add(newTransaction)
         db.session.commit()
@@ -216,6 +221,7 @@ def exit(id):
     transaction = ListingTransaction.query.filter_by(listingID=listing.id, participating=True).first()
     if not transaction:
         userTransaction.winner  = True
+        transaction.price = round(transaction.price, 2)
         db.session.commit()
     flash("veiksmīgi esi izstājies no izsoles!","success")
     return redirect(url_for("listing.myHistory"))
@@ -302,3 +308,59 @@ def dbUpdateSpecific(id):
         "user": listing.userID,
     })
     return jsonify(data)
+
+
+
+@listing.route('/samaksa/<int:id>')
+def generate_pdf(id):
+    if not current_user.is_authenticated:
+        flash('tev nav piekļuve šajai lapai!','error')
+        redirect(url_for('auth.login'))
+    transaction = ListingTransaction.query.filter_by(listingID=id, buyerID=current_user.id).first()
+    if not transaction:
+        flash('tu neesi piedalījies šādā izsolē!','error')
+        redirect(url_for('home.index'))
+    if not transaction.winner:
+        flash('tu šajā izsolē neuzvarēji...','error')
+        redirect(url_for('home.index'))
+    random.seed(transaction.id)
+    key_value_pairs = {
+        'Cena': transaction.price,
+        'Vards': current_user.name,
+        'Uzvards': current_user.surname,
+        'Parskaites konts': 'LV86HABA0551040037935',
+        'Bankas parskaititaja vards' : 'Arvis Ceirulis',
+        'Informacija detalas' : str(transaction.id)+"-"+str(transaction.buyerID)+"-"+str(transaction.listingID)+":"+str(random.randint(100, 99999))+"_apmaksa",
+    }
+    item = Listing.query.filter_by(id=id).first()
+    title = item.name
+    description = item.description
+
+    response = make_response(generate_pdf_document(key_value_pairs, title, description))
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename='+title+'_apmaksa'+'.pdf'
+    return response
+
+def generate_pdf_document(key_value_pairs, title, description):
+    pdf = canvas.Canvas('temp.pdf')
+
+
+
+    pdf.setFont("Helvetica", 12)
+    x = 50
+    y = 650
+    for key, value in key_value_pairs.items():
+        pdf.drawString(x, y, f'{key}: {value}')
+        y -= 20
+    
+    pdf.setFont("Helvetica-Bold", 16)
+    pdf.drawString(50, 750, title)
+    pdf.setFont("Helvetica", 12)
+    pdf.drawString(50, 700, description)
+    
+    pdf.save()
+
+    with open('temp.pdf', 'rb') as f:
+        pdf_content = f.read()
+
+    return pdf_content

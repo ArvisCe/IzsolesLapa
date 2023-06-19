@@ -45,6 +45,12 @@
                 font-size: 6vw;
             }
         }
+
+        a.active {
+            font-weight:600;
+            color:rgb(155, 81, 174);
+        }
+
         .website
         {
             margin: 10vw;
@@ -169,15 +175,15 @@
     <div class="website">
         <h1 style="color:rgb(77, 151, 77);">Pagrabs.xyz</h1>
         <div class="navigation">
-            <a class="link" href="{{url_for('home.index')}}">
+            <a class="link {% block izsoles %}{% endblock %}" href="{{url_for('home.index')}}">
                 Izsoles
             </a>
             {% if current_user.name %}
                 {% if current_user.isVerified %}
-                    <a class="link" href="{{url_for('listing.new')}}">
+                    <a class="link {% block ievietot %}{% endblock %}" href="{{url_for('listing.new')}}">
                         Ievietot
                     </a>
-                    <a class="link" href="{{url_for('listing.myHistory')}}">
+                    <a class="link {% block pirkumi %}{% endblock %}" href="{{url_for('listing.myHistory')}}">
                         Pirkumi
                     </a>
                 {% endif %}
@@ -185,7 +191,7 @@
                 <a class="linkleft" href="/logout">
                     iziet 
                 </a>
-                <a class="linkleft" href="{{url_for('user.profile')}}">
+                <a class="linkleft {% block profils %}{% endblock %}" href="{{url_for('user.profile')}}">
                     Profils
                 </a>
                 <a class="profileInfo">
@@ -197,10 +203,10 @@
                     </a>
                 {% endif %}
             {% else %}
-                <a class="linkleft" href="{{url_for('auth.register')}}">
+                <a class="linkleft {% block registreties %}{% endblock %}" href="{{url_for('auth.register')}}">
                     reģistrēties
                 </a>
-                <a class="linkleft" href="{{url_for('auth.login')}}">
+                <a class="linkleft {% block pieslegties %}{% endblock %}" href="{{url_for('auth.login')}}">
                     pieslēgties
                 </a>
             {% endif %}

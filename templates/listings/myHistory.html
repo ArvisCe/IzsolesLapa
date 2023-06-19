@@ -1,5 +1,7 @@
 {% extends 'template.html' %}
 
+{% block pirkumi %}active{% endblock %}
+
 {% block content %} 
 <style>
     .listing {
@@ -60,6 +62,9 @@
                 Sākuma datums: {{endedListings[i].auctionTime}} <br>
                 {% if endedTransactions[i].winner %}
                     <h4 style="color: green;">Tu šo izsoli uzvarēji!</h4>
+                    {% if not endedTransactions[i].paid %}
+                        <a href="/prece/samaksa/{{endedTransactions[i].id}}">apmaksāt</a>
+                    {% endif %}
                 {% else %}
                     <h4 style="color: red;">Šajā izsolē bija cits uzvarētājs!</h4>
                 {% endif %}
