@@ -12,10 +12,10 @@ def login():
     if request.method == "POST":
         username = request.form['username']
         password = request.form['password']
-        if "@" in username:
-            user = User.query.filter_by(email=username).first()
-        else:
+        if User.query.filter_by(username=username).first():
             user = User.query.filter_by(username=username).first()
+        else:
+            user = User.query.filter_by(phone=username).first()
         if not user:
             flash('Nepareizi ievadīts lietotājvārds vai parole!','error')
             return redirect(url_for("auth.login"))

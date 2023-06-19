@@ -1,6 +1,6 @@
 from flask import jsonify, Blueprint, render_template, request, redirect, flash, url_for, make_response
 from datetime import timedelta, datetime
-from models import Listing, db, current_user, ListingTransaction, pytz
+from models import Listing, db, current_user, ListingTransaction, pytz, User
 import os
 import uuid
 from reportlab.pdfgen import canvas
@@ -204,12 +204,20 @@ def join(id):
 
 @listing.route("/iziet/<int:id>")
 def exit(id):
-    listing = Listing.query.filter_by(id=id).first()
     userTransaction = ListingTransaction.query.filter_by(buyerID=current_user.id, listingID=id).first()
     if not userTransaction:
         return redirect(url_for("home.index"))
-    if listing.auctionStatus == 1:
-        db.session.delete(userTransaction)
+    db.session.delete(userTransaction)
+    db.session.commit()
+    flash("veiksmīgi esi izstājies no izsoles!","success")
+    return redirect(url_for("listing.myHistory"))
+
+@listing.route("/piesolit/<int:id>")
+def bet(id):
+    listing = Listing.query.filter_by(id=id).first()
+    userTransaction = ListingTransaction.query.filter_by(buyerID=current_user.id, listingID=id).first()
+    if not userTransaction:
+        return redirect(url_for("home.index"))     
     else:
         latvia_timezone = pytz.timezone('Europe/Riga')
         current_time = datetime.now(latvia_timezone)
@@ -217,16 +225,14 @@ def exit(id):
         userTransaction.participating = False
         userTransaction.price = listing.price
         userTransaction.date = current_time    
-    db.session.commit()
+        db.session.commit()
     transaction = ListingTransaction.query.filter_by(listingID=listing.id, participating=True).first()
     if not transaction:
         userTransaction.winner  = True
+        userTransaction.price = round(int(userTransaction.price), 2)
         db.session.commit()
-        transaction.price = round(transaction.price, 2)
-        db.session.commit()
-    flash("veiksmīgi esi izstājies no izsoles!","success")
+    flash("veiksmīgi esi piesolījis izsolei!","success")
     return redirect(url_for("listing.myHistory"))
-
 @listing.route("/izsole/<int:id>")
 def auction(id):
     listing = Listing.query.filter_by(id=id).first()
@@ -254,6 +260,7 @@ def myHistory():
     activeListings = []
     endedListings = []
     endedTransactions = []
+    endedTransactionsSeller = []
     waitingListings = []
     ids = []
     transactions = ListingTransaction.query.filter_by(buyerID=current_user.id).all()
@@ -265,6 +272,7 @@ def myHistory():
             activeListings.append(listing)
         else:
             endedListings.append(listing)
+            endedTransactionsSeller.append(User.query.filter_by(id=listing.userID).first())
             endedTransactions.append(transaction)
         for activeListing in activeListings:
             ids.append(activeListing.id)
@@ -274,7 +282,8 @@ def myHistory():
                            endedListings = endedListings,
                            waitingListings = waitingListings,
                            endedTransactions = endedTransactions,
-                           ids = ids)
+                           ids = ids,
+                           transSeller = endedTransactionsSeller)
 
 @listing.route("/db/refresh/get/<int:page>", methods=["GET"])
 def dbUpdate(page):
@@ -317,16 +326,17 @@ def generate_pdf(id):
     if not current_user.is_authenticated:
         flash('tev nav piekļuve šajai lapai!','error')
         redirect(url_for('auth.login'))
-    transaction = ListingTransaction.query.filter_by(listingID=id, buyerID=current_user.id).first()
+    transaction = ListingTransaction.query.filter_by(buyerID=current_user.id, listingID=id).first()
+    print(transaction)
     if not transaction:
         flash('tu neesi piedalījies šādā izsolē!','error')
-        redirect(url_for('home.index'))
+        return redirect(url_for('home.index'))
     if not transaction.winner:
         flash('tu šajā izsolē neuzvarēji...','error')
-        redirect(url_for('home.index'))
+        return redirect(url_for('home.index'))
     random.seed(transaction.id)
     key_value_pairs = {
-        'Cena': transaction.price,
+        'Cena': str(transaction.price)+" EUR",
         'Vards': current_user.name,
         'Uzvards': current_user.surname,
         'Parskaites konts': 'LV86HABA0551040037935',
@@ -334,8 +344,8 @@ def generate_pdf(id):
         'Informacija detalas' : str(transaction.id)+"-"+str(transaction.buyerID)+"-"+str(transaction.listingID)+":"+str(random.randint(100, 99999))+"_apmaksa",
     }
     item = Listing.query.filter_by(id=id).first()
-    title = item.name
-    description = item.description
+    title = "Prece: "+item.name
+    description = "Apraksts: "+item.description
 
     response = make_response(generate_pdf_document(key_value_pairs, title, description))
     response.headers['Content-Type'] = 'application/pdf'
