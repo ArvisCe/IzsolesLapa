@@ -1,8 +1,9 @@
 {% extends 'template.html' %}
 
-{% block title %} Lietotājs ar id {{user.id}} {% endblock %}
+{% block title %}<a href="/admin/view/users">atpakaļ</a>{% endblock %}
 {% block content %} 
 <center>
+<h1>Lietotājs ar id {{user.id}}</h1>
 <form action="/admin/update_user/{{user.id}}" method="post">
         <input 
         type="text" 
@@ -19,10 +20,24 @@
         <br>
         <input class="formButton" type="submit" value="Saglabāt">
 </form>
-<form action="/admin/user/delete/{{user.id}}">
+<form action="/admin/user/delete/{{user.id}}" method="post">
     <input class="formButton red" type="submit" value="dzēst">
 </form>
+<h2>Bankas informācija:</h2>
+<h3>Bankas konts: {{user.bankAccount}}</h3>
+<h3>Banks vārds: {{user.bankName}}</h3>
+<h3>Bankas uzvārds: {{user.bankSurname}}</h3>
 <hr>
+<h2>Piešķirt tiesības</h2>
+{% if not user.isAdmin %}
+    <form action="/admin/user/give_admin/{{user.id}}" method="post">
+        <input class="formButton" type="submit" value="iedot adminu">
+    </form>
+{% else %}
+    <form action="/admin/user/take_admin/{{user.id}}" method="post">
+        <input class="formButton" type="submit" value="noņemt adminu">
+    </form>
+{% endif %}
 </center>
 <style>
     .formInput 

@@ -44,6 +44,39 @@
         <h3>Verifikācijas kods: {{current_user.verificationCode}}</h3>
     {% else %}
         Tu esi verificēts!
+        {% if not current_user.bankAccount %}
+            <h4>Lai varētu saņemt naudu par saviem ievietojumiem, vajag pievienot savu bankas informāciju!</h4>
+            <form method="POST" action="/lietotajs/add-bank">
+                <h2>Pievienot banku!</h2>
+                <input 
+                    class="formInput"
+                    maxlength="12"
+                    type="text" 
+                    placeholder="Konta numurs" 
+                    name="bankAccount" 
+                    value="{{ request.form['bankAccount'] }}" 
+                    required> <br>
+                
+                <input 
+                    class="formInput"
+                    maxlength="12"
+                    type="text" 
+                    placeholder="Konta īpašnieka vārds" 
+                    name="bankName" 
+                    value="{{ request.form['bankName'] }}" 
+                    required> <br>
+
+                <input 
+                    class="formInput"
+                    maxlength="12"
+                    type="text" 
+                    placeholder="Konta īpašnieka uzvārds" 
+                    name="bankSurname" 
+                    value="{{ request.form['bankSurname'] }}" 
+                    required> <br>
+                <input class="formButton" type="submit" value="pievienot">
+            </form> 
+        {% endif %}
     {% endif %}
     <hr style="width: 60%;">
 

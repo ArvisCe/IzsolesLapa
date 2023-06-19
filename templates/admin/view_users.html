@@ -6,31 +6,27 @@
  {% for user in users %}
     <form action="/admin/update_user/{{user.id}}" method="post">
             <h3>{{user.id}}</h3>
+            Vārds<br>
             <input 
             type="text" 
             class="formInput"
             placeholder="{{user.name}}" 
             name="name" 
             value="{{ request.form['name'] }}{{user.name}}"> <br>
+            Lietotājvārds<br>
             <input 
             type="text" 
             class="formInput"
             placeholder="{{user.username}}" 
             name="username" 
-            value="{{ request.form['username'] }}{{user.username    }}">
+            value="{{ request.form['username'] }}{{user.username    }}"><br>
             
-            <input 
-            type="number"
-            step="0.01" 
-            class="formInput"
-            placeholder="{{user.balance}}" 
-            name="balance" 
-            value="{{ request.form['balance'] }}{{user.balance    }}"> <br>
             <input class="formButton" type="submit" value="Saglabāt">
     </form>
     <form action="/admin/user/delete/{{user.id}}" method="post">
         <input class="formButton red" type="submit" value="dzēst">
     </form>
+    <a href="/admin/view/user/{{user.id}}">apskatīt tuvāk</a>
     <hr>
  {% endfor %}
 </center>

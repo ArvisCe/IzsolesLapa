@@ -42,17 +42,46 @@ def update_user(id):
     errors = 0
     username = request.form["username"]
     name = request.form["name"]
-    balance = request.form["balance"]
-    if username != user.username:
-        if User.query.filter_by(username=username):
-            flash("Nevar 2 lietotājiem būt 1 lietotājvārds! :D","error")
-            errors += 1
+    if User.query.filter_by(username=username).first():
+        flash("Nevar 2 lietotājiem būt 1 lietotājvārds! :D","error")
+        errors += 1
     
     if errors > 0:
         return redirect(url_for("admin.view_users"))
     user.username = username
     user.name = name
-    user.balance = balance
     db.session.commit()
     flash("veiksmīgi rediģēts lietotājs!",'success')
     return redirect(url_for("admin.view_users"))
+
+@admin.route("/user/give_admin/<int:id>", methods=['POST'])
+def giveAdmin(id):
+    if not current_user.isAdmin:
+        flash('parastajam mirstīgajam nav šādas tiesības..','error')
+        return redirect(url_for("home.index"))
+    if current_user.id == id:
+        flash('nevar pats sev iedot adminu :D!','error')
+        return redirect(url_for("admin.view_user",id=id))
+    
+    user = User.query.filter_by(id=id).first()
+    user.isAdmin = True
+    db.session.commit()
+    message = 'veiksmīgi iedevi admina tiesības lietotājam ar id',str(id)
+    flash(message,'success')
+    return redirect(url_for("admin.view_user",id=id))
+
+@admin.route("/user/take_admin/<int:id>",methods=['POST'])
+def takeAdmin(id):
+    if not current_user.isAdmin:
+        flash('parastajam mirstīgajam nav šādas tiesības..','error')
+        return redirect(url_for("home.index"))
+    if current_user.id == id:
+        flash('nevar pats sev noņemt adminu :D!','error')
+        return redirect(url_for("admin.view_user",id=id))
+
+    user = User.query.filter_by(id=id).first()
+    user.isAdmin = False
+    db.session.commit()
+    message = 'veiksmīgi noņēmi admina tiesības lietotājam ar id',str(id)
+    flash(message,'success')
+    return redirect(url_for("admin.view_user",id=id))
