@@ -221,6 +221,7 @@ def exit(id):
     transaction = ListingTransaction.query.filter_by(listingID=listing.id, participating=True).first()
     if not transaction:
         userTransaction.winner  = True
+        db.session.commit()
         transaction.price = round(transaction.price, 2)
         db.session.commit()
     flash("veiksmīgi esi izstājies no izsoles!","success")
