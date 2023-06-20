@@ -133,7 +133,7 @@ def edit(id):
     listing.description = description
     db.session.commit()
     flash('veiksmīgi nomainīta preces informācija','success')
-    return redirect("/prece/apskatit/"+id)
+    return redirect(url_for("home.index"))
     
 
 
@@ -335,13 +335,15 @@ def generate_pdf(id):
         flash('tu šajā izsolē neuzvarēji...','error')
         return redirect(url_for('home.index'))
     random.seed(transaction.id)
+    transaction.bankDescription = str(transaction.id)+"-"+str(transaction.buyerID)+"-"+str(transaction.listingID)+":"+str(random.randint(100, 99999))+"_apmaksa"
+    db.session.commit()
     key_value_pairs = {
         'Cena': str(transaction.price)+" EUR",
         'Vards': current_user.name,
         'Uzvards': current_user.surname,
         'Parskaites konts': 'LV86HABA0551040037935',
         'Bankas parskaititaja vards' : 'Arvis Ceirulis',
-        'Informacija detalas' : str(transaction.id)+"-"+str(transaction.buyerID)+"-"+str(transaction.listingID)+":"+str(random.randint(100, 99999))+"_apmaksa",
+        'Informacija detalas' : transaction.bankDescription,
     }
     item = Listing.query.filter_by(id=id).first()
     title = "Prece: "+item.name
@@ -375,3 +377,16 @@ def generate_pdf_document(key_value_pairs, title, description):
         pdf_content = f.read()
 
     return pdf_content
+
+
+
+
+@listing.route("/handshake/buyer/<int:id>")
+def handshake_buyer(id):
+    transaction = ListingTransaction.query.filter_by(listingID=id, buyerID = current_user.id, winner=True).first()
+    if not transaction:
+        flash("Tu neesi šajā izsolē piedalījies vai arī neuzvarēji..",'error')
+        return redirect(url_for("home.index"))
+    transaction.buyerShaked = True
+    db.session.commit()
+    return redirect(url_for("listing.myHistory"))

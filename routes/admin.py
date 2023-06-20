@@ -3,6 +3,18 @@ from models import db, User, LoginManager, Bcrypt, Listing, ListingTransaction, 
 
 admin = Blueprint("admin", __name__, static_folder="static", template_folder="templates")
 
+
+@admin.route("/panel")
+def adminPanel():
+    if not current_user.is_authenticated:
+        flash("kur lien?",'error')
+        return redirect(url_for("home.index"))
+    if not current_user.isAdmin:
+        flash("kur mēģini ielīst mazais? :D",'error')
+        return redirect(url_for('home.index'))
+    return render_template("/admin/selection.html")
+
+
 @admin.route("/view/users")
 def view_users():
     if not current_user.isAdmin:
@@ -85,3 +97,54 @@ def takeAdmin(id):
     message = 'veiksmīgi noņēmi admina tiesības lietotājam ar id',str(id)
     flash(message,'success')
     return redirect(url_for("admin.view_user",id=id))
+
+@admin.route("/prece/<int:id>")
+def preceAdmin(id):
+    if not current_user.is_authenticated:
+        return redirect(url_for('home.index'))
+    if not current_user.isAdmin:
+        flash('Tikai daži izredzētie var šeit iet','error')
+        return redirect(url_for('home.index'))
+    
+    return render_template("admin/view_listing.html")
+
+@admin.route("/preces")
+def precesAdmin():
+    if not current_user.is_authenticated:
+        return redirect(url_for('home.index'))
+    if not current_user.isAdmin:
+        flash('Tikai daži izredzētie var šeit iet','error')
+        return redirect(url_for('home.index'))
+    
+    return render_template("admin/view_listings.html", listings=Listing.query.filter(Listing.auctionStatus.notin_([2,3])).all())
+
+
+@admin.route("/transakcijas")
+def transakcijas():
+    if not current_user.is_authenticated:
+        return redirect(url_for('home.index'))
+    if not current_user.isAdmin:
+        flash('TU NEESI DAĻA NO DIEVIEM!', 'error')
+        return redirect(url_for('home.index'))
+    transactions = ListingTransaction.query.filter_by(winner=True).all()
+    listings = []
+    for transaction in transactions:
+        listings.append(Listing.query.filter_by(id=transaction.listingID).first())
+    return render_template("admin/view_transactions.html", transactions = transactions, listings=listings)
+
+
+@admin.route("/set_paid_statuss/<int:id>")
+def transaction_paid_statuss(id):
+    if not current_user.is_authenticated:
+        return redirect(url_for('home.index'))
+    if not current_user.isAdmin:
+        flash("TEV NAV VARA ŠEIT", 'error')
+        return redirect(url_for("home.index"))
+    
+    transaction = ListingTransaction.query.filter_by(id=id).first()
+    if transaction.paid:
+        transaction.paid = False
+    else:
+        transaction.paid = True
+    db.session.commit()
+    return redirect(url_for('admin.transakcijas'))

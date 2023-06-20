@@ -1,0 +1,66 @@
+{% extends 'template.html' %}
+
+{% block title %}<a href="/admin/view/users">atpakaļ</a>{% endblock %}
+{% block content %} 
+<center>
+<h1>Prece ar id {{listing.id}}</h1>
+<form action="/admin/update_user/{{user.id}}" method="post">
+        <input 
+        type="text" 
+        class="formInput"
+        placeholder="{{user.name}}" 
+        name="name" 
+        value="{{ request.form['name'] }}{{user.name}}"> <br>
+        <input 
+        type="text" 
+        class="formInput"
+        placeholder="{{user.username}}" 
+        name="username" 
+        value="{{ request.form['username'] }}{{user.username    }}">
+        <br>
+        <input class="formButton" type="submit" value="Saglabāt">
+</form>
+</center>
+<style>
+    .formInput 
+    {
+        margin-bottom: 5px;
+        width: 50%;
+        height:50px;
+        font-size:larger; 
+        border-radius: 5px;  
+    }
+    .formInputTall
+    {
+        margin-bottom: 5px;
+        width: 50%;
+        height:80px;
+        font-size:x-large; 
+        border-radius: 5px;  
+    }
+    .formInputSM
+    {
+        margin-bottom: 5px;
+        width: 10%;
+        height:50px;
+        font-size:larger; 
+        border-radius: 5px;  
+    }
+    .formButton
+    {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        width: 20%;
+        height:50px;
+        font-size:larger; 
+        border-radius: 5px;  
+        text-align: center;   
+    }
+    .red
+    {
+        background-color: #630e08;
+        border-style: none;
+        color: #ffc6c2;
+    }
+</style>
+{% endblock %}

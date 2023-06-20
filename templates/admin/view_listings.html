@@ -1,0 +1,58 @@
+{% extends 'template.html' %}
+
+{% block title %}Preces{% endblock %}
+{% block content %} 
+<center>
+    {% for listing in listings %}
+        ID: {{listing.id}}<br>
+        nosaukums: {{listing.name}}<br>
+        apraksts: {{listing.description}}<br>
+        cena: {{listing.price}}<br>
+        cenas kāpums: {{listing.priceIncrease}} <br>
+        <a href="/prece/rediget/{{listing.id}}">rediģēt</a>
+        <hr>
+    {% endfor %}
+</center>
+<style>
+    .formInput 
+    {
+        margin-bottom: 5px;
+        width: 50%;
+        height:50px;
+        font-size:larger; 
+        border-radius: 5px;  
+    }
+    .formInputTall
+    {
+        margin-bottom: 5px;
+        width: 50%;
+        height:80px;
+        font-size:x-large; 
+        border-radius: 5px;  
+    }
+    .formInputSM
+    {
+        margin-bottom: 5px;
+        width: 10%;
+        height:50px;
+        font-size:larger; 
+        border-radius: 5px;  
+    }
+    .formButton
+    {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        width: 20%;
+        height:50px;
+        font-size:larger; 
+        border-radius: 5px;  
+        text-align: center;   
+    }
+    .red
+    {
+        background-color: #630e08;
+        border-style: none;
+        color: #ffc6c2;
+    }
+</style>
+{% endblock %}

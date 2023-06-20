@@ -67,8 +67,14 @@
                     <h4 style="color: green;">Tu šo izsoli uzvarēji!</h4>
                     {% if not endedTransactions[i].paid %}
                         <a href="/prece/samaksa/{{endedTransactions[i].id}}">apmaksāt</a><br>
-                        Pārdevēja numurs: {{transSeller[i].phone}}
-                    {% endif %}
+                        Pārdevēja numurs: {{transSeller[i].phone}}<br>
+                    {% else %}
+                        {% if not endedTransactions[i].buyerShaked %}
+                            <a href="/prece/handshake/buyer/{{endedTransactions[i].id}}">Rokas spiediens</a>
+                        {% else %}
+                            Esi "paspiedis" roku.. gaidam kamēr to izdarīs pārdevējs
+                        {% endif %}
+                    {% endif %}        
                 {% else %}
                     <h4 style="color: red;">Šajā izsolē bija cits uzvarētājs!</h4>
                 {% endif %}

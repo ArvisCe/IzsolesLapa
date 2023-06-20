@@ -1,0 +1,69 @@
+{% extends 'template.html' %}
+
+{% block title %}Transakcijas{% endblock %}
+{% block content %} 
+<center>
+    {% for i in range(transactions|length) %}
+        ID: {{transactions[i].id}}<br>
+        <a href="/admin/view/user/{{transactions[i].buyerID}}">
+            buyer ID: {{transactions[i].buyerID}}
+        </a><br>
+        <a href="/admin/view/user/{{listings[i].userID}}">
+            seller ID: {{listings[i].userID}}
+        </a><br>
+
+        Apmaksas info: {{transactions[i].bankDescription}}
+        <br>
+        {% if transactions[i].paid%}
+            apmaksas statuss: <a href="/admin/set_paid_statuss/{{transactions[i].id}}">apmaksāts</a>
+        {% else %}
+            apmaksas statuss: <a href="/admin/set_paid_statuss/{{transactions[i].id}}">neapmaksāts</a>
+        {% endif %}
+        <br>
+        <hr>
+
+{% endfor %}
+</center>
+<style>
+    .formInput 
+    {
+        margin-bottom: 5px;
+        width: 50%;
+        height:50px;
+        font-size:larger; 
+        border-radius: 5px;  
+    }
+    .formInputTall
+    {
+        margin-bottom: 5px;
+        width: 50%;
+        height:80px;
+        font-size:x-large; 
+        border-radius: 5px;  
+    }
+    .formInputSM
+    {
+        margin-bottom: 5px;
+        width: 10%;
+        height:50px;
+        font-size:larger; 
+        border-radius: 5px;  
+    }
+    .formButton
+    {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        width: 20%;
+        height:50px;
+        font-size:larger; 
+        border-radius: 5px;  
+        text-align: center;   
+    }
+    .red
+    {
+        background-color: #630e08;
+        border-style: none;
+        color: #ffc6c2;
+    }
+</style>
+{% endblock %}

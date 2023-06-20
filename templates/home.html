@@ -224,6 +224,17 @@
                     listingImage.style.objectFit = "cover";
                     listingInfo.appendChild(listingImage);
 
+                    {% if current_user.id == listing.userID or current_user.isAdmin %}
+                        var br = document.createElement("br");
+                        listingInfo.appendChild(br);
+
+
+                        var link = document.createElement("a");
+                        link.href = "/prece/rediget/{{listing.id}}";
+                        link.textContent = "rediģēt";
+                        listingInfo.appendChild(link);  
+                    {% endif %}
+
                     overlay.appendChild(listingInfo);
                     document.body.appendChild(overlay);
     
@@ -259,19 +270,18 @@
         success: function(data) {
              $.each(data, function(index, listing) {
             var row = $("div[data-id='" + listing.id + "']");
+            var username = '{{current_user.username}}';
+            var id = '{{current_user.id}}';
             if(document.getElementById("name"+listing.ident)){
                 document.getElementById("name"+listing.ident).innerHTML = listing.name;
                 document.getElementById("image"+listing.ident).src = listing.image;
-                var username = '{{current_user.username}}';
-                var id = '{{current_user.id}}';
-                console.log('id: '+id);
-                console.log('user: '+listing.user);
                 if(listing.auctionStatus === 0)
                 {
                     document.getElementById('auctionStatus'+listing.ident).innerHTML = "izsole gaida";
                 }
                 else if(listing.auctionStatus === 1)
                 {
+                    console.log("{{current_user.is_authenticated}}");   
                     if(username)
                     {
                         if(Number(id) === Number(listing.user))

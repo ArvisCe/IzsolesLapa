@@ -61,8 +61,10 @@ class ListingTransaction(db.Model):
     date = db.Column(db.DateTime, nullable=False)
     rating = db.Column(db.Integer, nullable=True)
     comment = db.Column(db.String, nullable=True)
+    
     paid = db.Column(db.Boolean, nullable=False)
     
-    listingShaked = db.Column(db.Boolean, nullable=False)
     buyerShaked = db.Column(db.Boolean, nullable=False)
     cancelled = db.Column(db.Boolean, nullable=False)
+    
+    bankDescription = db.Column(db.String, nullable=True)

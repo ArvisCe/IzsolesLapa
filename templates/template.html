@@ -47,7 +47,7 @@
         }
 
         a.active {
-            font-weight:600;
+            font-weight:550;
             color:rgb(155, 81, 174);
         }
 
@@ -194,14 +194,14 @@
                 <a class="linkleft {% block profils %}{% endblock %}" href="{{url_for('user.profile')}}">
                     Profils
                 </a>
+                {% if current_user.isAdmin %}
+                <a class="linkleft" href="{{url_for('admin.adminPanel')}}">
+                    Admin Panel
+                </a>
+                {% endif %}
                 <a class="profileInfo">
                     {{current_user.username}}
                 </a>
-                {% if current_user.isAdmin %}
-                    <a class="linkleft" href="{{url_for('admin.view_users')}}">
-                        Admin
-                    </a>
-                {% endif %}
             {% else %}
                 <a class="linkleft {% block registreties %}{% endblock %}" href="{{url_for('auth.register')}}">
                     reģistrēties
