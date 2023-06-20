@@ -3,6 +3,21 @@
 {% block title %}Transakcijas{% endblock %}
 {% block content %} 
 <center>
+    <form id="transaction_by_id" method="get" action="/admin/transakcija/">
+        <input type="text" id="tranactionId">
+        <input type="submit">
+    </form>
+    
+    <script>
+        document.getElementById("transaction_by_id").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevents the form from submitting
+    
+            var tranactionId = document.getElementById("tranactionId").value;
+            var actionUrl = "/admin//transakcija/" + tranactionId;
+            this.action = actionUrl;
+            this.submit(); // Submits the form with the updated action URL
+        });
+    </script><br>
     {% for i in range(transactions|length) %}
         ID: {{transactions[i].id}}<br>
         <a href="/admin/view/user/{{transactions[i].buyerID}}">
@@ -14,11 +29,23 @@
 
         Apmaksas info: {{transactions[i].bankDescription}}
         <br>
-        {% if transactions[i].paid%}
+        {% if transactions[i].paid %}
             apmaksas statuss: <a href="/admin/set_paid_statuss/{{transactions[i].id}}">apmaksāts</a>
         {% else %}
             apmaksas statuss: <a href="/admin/set_paid_statuss/{{transactions[i].id}}">neapmaksāts</a>
+        {% endif %}<br>
+        {% if transactions[i].buyerShaked %}
+            Lietotājs ir saņēmis preci!
+            {% if not tranasctions[i].moneyReceived %}
+                <br>
+                Pārdevējs nav saņēmis naudu
+            {% else %}
+
+            {% endif %}
+        {% else %}
+            Lietotājs nav saņēmis preci!
         {% endif %}
+
         <br>
         <hr>
 

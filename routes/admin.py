@@ -32,7 +32,7 @@ def delete_users(id):
     user = User.query.filter_by(id=id).first()
     if current_user == user:
         flash("Tu nevari dzēst pats sevi.. wtf vecīt? :D viss kārtībā?",'error')
-        return redirect(url_for("admin.view_users"))
+        return redirect(url_for("admin.view_user",id=id))
     db.session.delete(user)
     db.session.commit()
     return redirect(url_for("admin.view_users"))
@@ -42,7 +42,10 @@ def view_user(id):
     if not current_user.isAdmin:
         flash("PARASTIE MIRSTĪGIE NEDRĪKST APSKATĪT",'error')
         return redirect(url_for("home.index"))
-    return render_template("/admin/view_user.html", user = User.query.filter_by(id=id).first())
+    user = User.query.filter_by(id=id).first()
+    if not user:
+        return ('', 204)
+    return render_template("/admin/view_user.html", user = user)
 
 
 @admin.route("/update_user/<int:id>", methods=["POST"])
@@ -55,16 +58,17 @@ def update_user(id):
     username = request.form["username"]
     name = request.form["name"]
     if User.query.filter_by(username=username).first():
-        flash("Nevar 2 lietotājiem būt 1 lietotājvārds! :D","error")
+        if not username == current_user.username:
+            flash("Nevar 2 lietotājiem būt 1 lietotājvārds! :D","error")
         errors += 1
     
     if errors > 0:
-        return redirect(url_for("admin.view_users"))
+        return redirect(url_for("admin.view_user",id=id))
     user.username = username
     user.name = name
     db.session.commit()
     flash("veiksmīgi rediģēts lietotājs!",'success')
-    return redirect(url_for("admin.view_users"))
+    return redirect(url_for("admin.view_user",id=id))
 
 @admin.route("/user/give_admin/<int:id>", methods=['POST'])
 def giveAdmin(id):
@@ -132,6 +136,18 @@ def transakcijas():
         listings.append(Listing.query.filter_by(id=transaction.listingID).first())
     return render_template("admin/view_transactions.html", transactions = transactions, listings=listings)
 
+@admin.route("/transakcija/<string:bankdescription>")
+def transakcija(bankdescription):
+    if not current_user.is_authenticated:
+        return redirect(url_for('home.index'))
+    if not current_user.isAdmin:
+        flash('TU NEESI DAĻA NO DIEVIEM!', 'error')
+        return redirect(url_for('home.index'))
+    transactions = ListingTransaction.query.filter(ListingTransaction.bankDescription.contains(bankdescription)).all()
+    listings = []
+    for transaction in transactions:
+        listings.append(Listing.query.filter_by(id=transaction.listingID).first())
+    return render_template("admin/view_transactions.html", transactions = transactions, listings=listings)
 
 @admin.route("/set_paid_statuss/<int:id>")
 def transaction_paid_statuss(id):

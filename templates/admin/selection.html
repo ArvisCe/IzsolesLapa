@@ -2,10 +2,45 @@
 
 {% block title %}Admin panelis</a>{% endblock %}
 {% block content %} 
-<center>
+<center style="text-align:center;">
     <a href="{{url_for('admin.view_users')}}">Lietotāji</a> <br>
-    <a href="{{url_for('admin.precesAdmin')}}">Preces</a>
+    <a href="{{url_for('admin.precesAdmin')}}">Preces</a> <br>
+    <a href="{{url_for('admin.transakcijas')}}">Transakcijas</a>
 
+    <h2>Meklēšana</h2>
+    <h3>Lietotājs pēc id</h3>
+    <form id="user_by_id" method="get" action="/admin/view/user/">
+        <input type="number" id="userId">
+        <input type="submit">
+    </form>
+    
+    <script>
+        document.getElementById("user_by_id").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevents the form from submitting
+    
+            var userId = document.getElementById("userId").value;
+            var actionUrl = "/admin/view/user/" + userId;
+            this.action = actionUrl;
+            this.submit(); // Submits the form with the updated action URL
+        });
+    </script>
+
+    <h3>Transakcija pēc apmaksas</h3>
+    <form id="transaction_by_id" method="get" action="/admin/transakcija/">
+        <input type="text" id="tranactionId">
+        <input type="submit">
+    </form>
+    
+    <script>
+        document.getElementById("transaction_by_id").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevents the form from submitting
+    
+            var tranactionId = document.getElementById("tranactionId").value;
+            var actionUrl = "/admin//transakcija/" + tranactionId;
+            this.action = actionUrl;
+            this.submit(); // Submits the form with the updated action URL
+        });
+    </script>
 </center>
 <style>
     

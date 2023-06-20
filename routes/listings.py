@@ -194,7 +194,7 @@ def join(id):
             winner = False,
             paid = False,
             buyerShaked = False,
-            cancelled = False,
+            moneyReceived = False
         )
         db.session.add(newTransaction)
         db.session.commit()
@@ -334,7 +334,7 @@ def generate_pdf(id):
         flash('tu šajā izsolē neuzvarēji...','error')
         return redirect(url_for('home.index'))
     random.seed(transaction.id)
-    transaction.bankDescription = str(transaction.id)+"-"+str(transaction.buyerID)+"-"+str(transaction.listingID)+":"+str(random.randint(100, 99999))+"_apmaksa"
+    transaction.bankDescription = "T"+str(transaction.id)+"-"+"U"+str(transaction.buyerID)+"-"+"L"+str(transaction.listingID)+":"+str(random.randint(100, 99999))+"_apmaksa"
     db.session.commit()
     key_value_pairs = {
         'Cena': str(transaction.price)+" EUR",

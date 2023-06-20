@@ -59,12 +59,12 @@ class ListingTransaction(db.Model):
     buyerID = db.Column(db.Integer, db.ForeignKey('User.id'))
     listingID =  db.Column(db.Integer, db.ForeignKey('Listing.id'))
     date = db.Column(db.DateTime, nullable=False)
-    rating = db.Column(db.Integer, nullable=True)
     comment = db.Column(db.String, nullable=True)
     
     paid = db.Column(db.Boolean, nullable=False)
     
     buyerShaked = db.Column(db.Boolean, nullable=False)
-    cancelled = db.Column(db.Boolean, nullable=False)
     
     bankDescription = db.Column(db.String, nullable=True)
+    
+    moneyReceived = db.Column(db.Boolean, nullable=False)
