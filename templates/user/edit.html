@@ -1,0 +1,101 @@
+{% extends 'template.html' %}
+
+
+{% block profils %}active{% endblock %}
+
+{% block content %} 
+<style>
+    .formInput 
+    {
+        margin-bottom: 5px;
+        width: 50%;
+        height:50px;
+        font-size:larger; 
+        border-radius: 5px;
+    }
+    .formButton
+    {
+        margin-bottom: 5px;
+        width: 20%;
+        height:50px;
+        text-align: center; 
+        font-size:larger; 
+        border-radius: 5px;  
+    }
+
+    .warning
+    {
+        background-color: rgb(255, 94, 94);
+        color:rgb(60, 0, 0);
+        width: 50%;
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+</style>
+<center>
+    <h1>Rediģēt profilu</h1>
+    <form method="POST" action="/verify">
+        <h2>pamata info</h2>
+        Lietotājvārds<br>
+        <input 
+            class="formInput"
+            maxlength="24"
+            type="text" 
+            placeholder="{{user.username}}" 
+            name="code" 
+            value="{{ request.form['username'] }}" 
+            required> <br>
+        Vārds<br>
+        <input 
+            class="formInput"
+            maxlength="24"
+            type="text" 
+            placeholder="{{user.name}}" 
+            name="code" 
+            value="{{ request.form['name'] }}" 
+            required> <br>
+        Uzvārds<br>
+        <input 
+            class="formInput"
+            maxlength="24"
+            type="text" 
+            placeholder="{{user.surname}}" 
+            name="code" 
+            value="{{ request.form['surname'] }}" 
+            required> <br>
+        <input class="formButton" type="submit" value="saglabāt">
+    </form>
+    <form method="POST" action="/verify">
+        <h2>Bankas info</h2>
+        Konta numurs<br>
+        <input 
+            class="formInput"
+            maxlength="17"
+            type="text" 
+            placeholder="{{user.bankAccount}}" 
+            name="code" 
+            value="{{ request.form['bank'] }}" 
+            required> <br>
+        Konta īpašnieka vārds<br>
+        <input 
+            class="formInput"
+            maxlength="64"
+            type="text" 
+            placeholder="{{user.bankName}}" 
+            name="code" 
+            value="{{ request.form['bankName'] }}" 
+            required> <br>
+        Konta īpašnieka uzvārds<br>
+        <input 
+            class="formInput"
+            maxlength="64"
+            type="text" 
+            placeholder="{{user.bankSurname}}" 
+            name="code" 
+            value="{{ request.form['bankSurname'] }}" 
+            required> <br>
+        <input class="formButton" type="submit" value="Saglabāt banku">
+    </form>
+</center>
+{% endblock %}

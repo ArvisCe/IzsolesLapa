@@ -30,3 +30,10 @@ def addBank():
     current_user.bankSurname = request.form['bankSurname']
     db.session.commit()
     return redirect(url_for('user.profile'))
+
+@user.route("/profils/rediget")
+def edit_profile():
+    if not current_user.is_authenticated:
+        flash("Dumiķi... nevari rediģēt savu kontu, ja neesi pieslēdzies :D",'error')
+        return redirect(url_for("home.index"))
+    return render_template("user/edit.html", user = current_user)
