@@ -52,16 +52,15 @@
         </form>
         <br>
         <br>
-        <h3>Verifikācijas kods: {{current_user.verificationCode}}</h3>
+        <h3>Verifikācijas kods: {{current_user.verificationCode}}</h3><br>
     {% else %}
-        Tu esi verificēts!
         {% if not current_user.bankAccount %}
             <h4>Lai varētu saņemt naudu par saviem ievietojumiem, vajag pievienot savu bankas informāciju!</h4>
             <form method="POST" action="/lietotajs/add-bank">
                 <h2>Pievienot banku!</h2>
                 <input 
                     class="formInput"
-                    maxlength="17"
+                    maxlength="25"
                     type="text" 
                     placeholder="Konta numurs" 
                     name="bankAccount" 
