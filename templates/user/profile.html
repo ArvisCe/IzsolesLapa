@@ -32,6 +32,113 @@
         margin-top: 20px;
         border-radius: 8px;
     }
+    a
+    {
+        text-decoration: none;
+        color: #ADA8BE;
+    }
+    .listing
+    {
+        background-color: transparent;
+        width: 80%;
+        height: 256px;
+        margin-top: 5%;
+        height: 150%;
+    }
+
+    hr
+    {
+        border-bottom:none;
+        border-left: none;
+        border-right: none;
+        border-top-width: 3px;
+        border-top-color: black;
+        background-color: black;
+    }
+
+    .listingImage
+    {
+        float: left; 
+        width: 256px;
+    }
+
+    .listingInfo
+    {
+        overflow: hidden; 
+        padding-left: 2vw;
+        padding-bottom: 1vh;
+        text-align:left;
+        text-decoration: none;
+    }
+    .name {
+        margin-top: 0px;
+    }
+    .startPrice
+    {
+        color: #A28497;
+        text-decoration: none;
+    }
+
+    .priceIncrease
+    {
+        color: #A28497;
+        text-decoration: none;
+    }
+
+    .auctionDate
+    {
+        color: #A28497; 
+        text-decoration: none;
+    }
+
+    .info
+    {
+        color: #A28497;
+        text-decoration: none;  
+    }
+
+    .description
+    {
+        word-break:keep-all;
+        padding-bottom: 5px;
+        border-bottom: 1px solid rgb(150, 150, 150);
+    }
+    .joinAuction
+    {
+        padding: 15px;
+        margin-top: 10px;
+        width: fit-content;
+        background-color:#4267B2;
+        color: white;
+    }
+    .joinAuction:hover
+    {
+        background-color:#1d489e;
+    }
+    .joinAuction:active
+    {
+        background-color:#0e388b;
+    }
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .listing-info {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        width: 90vw;
+        min-height: 50%;
+      }
 </style>
 <center>
     <h1>{{current_user.username}}</h1>
