@@ -121,7 +121,7 @@
         border-radius: 5px;
         text-align: center;
         width: 90vw;
-        height: 60vh;
+        min-height: 50%;
       }
 </style>
 
@@ -219,8 +219,7 @@
                     // Listing image
                     var listingImage = document.createElement("img");
                     listingImage.src = "{{listing.image}}";
-                    listingImage.style.width = "20vw";
-                    listingImage.style.height = "100%";
+                    listingImage.style.width = "30%";
                     listingImage.style.objectFit = "cover";
                     listingInfo.appendChild(listingImage);
 
