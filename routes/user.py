@@ -15,7 +15,8 @@ def profile():
     return render_template("user/profile.html", 
                            waitingListings = Listing.query.filter_by(userID=current_user.id, auctionStatus=0).all(),
                            ongoingListings = ongoing,
-                           endedListings = Listing.query.filter_by(userID=current_user.id, auctionStatus=3).all()
+                           endedListings = Listing.query.filter_by(userID=current_user.id, auctionStatus=3).all(),
+                           listings = Listing.query.filter_by(userID=current_user.id)
                            )
 
 

@@ -107,26 +107,84 @@
     {% if ongoingListings %}
         <h3>Šobrīd tiek izsolīts</h3>
         {% for listing in ongoingListings %}
-            {{listing.name}}
-            {{listing.startingPrice}}
-            {{listing.price}}
+            <div id="listing{{listing.id}}">
+                {{listing.name}}
+            </div><br>
         {% endfor %}
     {% endif %}
 
     {% if waitingListings %}
         <h3>Izsoles kas gaida</h3>
         {% for listing in waitingListings %}
-            {{listing.name}}
-            {{listing.startingPrice}}
-            {{listing.price}}
+            <div id="listing{{listing.id}}">
+                {{listing.name}}
+            </div><br>
         {% endfor %}
     {% endif %}
 
     {% if endedListings %}
     <h3>Beigušās izsoles</h3>
         {% for listing in endedListings %}
-            {{listing.name}}<br>
+            <div id="listing{{listing.id}}">
+                {{listing.name}}
+            </div><br>
         {% endfor %}
     {% endif %}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            {% for listing in listings %}
+                document.getElementById("listing{{listing.id}}").addEventListener("click", function() {
+                    var overlay = document.createElement("div");
+                    overlay.id = "overlay{{listing.id}}";
+                    overlay.classList.add("overlay");
+    
+                    var listingInfo = document.createElement("div");
+                    listingInfo.classList.add("listing-info");
+    
+
+    
+                    // Listing name
+                    var listingName = document.createElement("h1");
+                    listingName.classList.add("name");
+                    listingName.textContent = "{{listing.name}}";
+                    listingInfo.appendChild(listingName);
+    
+                    // Listing description
+                    var listingDescription = document.createElement("h3");
+                    listingDescription.classList.add("description");
+                    listingDescription.textContent = "{{listing.description}}";
+                    listingInfo.appendChild(listingDescription);
+    
+                    // Listing image
+                    var listingImage = document.createElement("img");
+                    listingImage.src = "{{listing.image}}";
+                    listingImage.style.width = "30%";
+                    listingImage.style.objectFit = "cover";
+                    listingInfo.appendChild(listingImage);
+
+                    {% if current_user.id == listing.userID or current_user.isAdmin %}
+                        var br = document.createElement("br");
+                        listingInfo.appendChild(br);
+
+
+                        var link = document.createElement("a");
+                        link.href = "/prece/rediget/{{listing.id}}";
+                        link.textContent = "rediģēt";
+                        listingInfo.appendChild(link);  
+                    {% endif %}
+
+                    overlay.appendChild(listingInfo);
+                    document.body.appendChild(overlay);
+    
+                    overlay.addEventListener("click", function(e) {
+                        if (e.target === overlay) {
+                            document.body.removeChild(overlay);
+                        }
+                    });
+                });
+            {% endfor %}
+        });
+    </script>
 </center>
 {% endblock %}
