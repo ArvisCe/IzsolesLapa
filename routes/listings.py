@@ -193,7 +193,6 @@ def join(id):
             date = current_time,
             winner = False,
             paid = False,
-            listingShaked = False,
             buyerShaked = False,
             cancelled = False,
         )
