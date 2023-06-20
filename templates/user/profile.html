@@ -22,6 +22,16 @@
         font-size:larger; 
         border-radius: 5px;  
     }
+
+    .warning
+    {
+        background-color: rgb(255, 94, 94);
+        color:rgb(60, 0, 0);
+        width: 50%;
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
 </style>
 <center>
     <h1>{{current_user.username}}</h1>
@@ -50,7 +60,7 @@
                 <h2>Pievienot banku!</h2>
                 <input 
                     class="formInput"
-                    maxlength="12"
+                    maxlength="17"
                     type="text" 
                     placeholder="Konta numurs" 
                     name="bankAccount" 
@@ -59,7 +69,7 @@
                 
                 <input 
                     class="formInput"
-                    maxlength="12"
+                    maxlength="64"
                     type="text" 
                     placeholder="Konta īpašnieka vārds" 
                     name="bankName" 
@@ -68,7 +78,7 @@
 
                 <input 
                     class="formInput"
-                    maxlength="12"
+                    maxlength="64"
                     type="text" 
                     placeholder="Konta īpašnieka uzvārds" 
                     name="bankSurname" 
@@ -83,6 +93,16 @@
     <h2>Mani ievietojumi</h2>
     {% if not ongoingListings and not waitingListings and not endedListings %}
         <h3>Tu vēl neko neesi ievietojis!</h3>
+    {% endif %}
+    {% if endedListings or waitingListings or ongoingListings %}
+        {% if not current_user.bankAccount %}
+
+        <div class="warning">
+            <h3>Brīdinājums</h3>
+            Nesaņemsi naudu par izsoli, ja nebūs pievienota bankas<br>
+            konta informācija. Pievieno to savā profilā!
+        </div>
+        {% endif %}
     {% endif %}
     {% if ongoingListings %}
         <h3>Šobrīd tiek izsolīts</h3>
