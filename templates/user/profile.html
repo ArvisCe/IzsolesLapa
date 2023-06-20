@@ -215,8 +215,10 @@
         <h3>Šobrīd tiek izsolīts</h3>
         {% for listing in ongoingListings %}
             <div id="listing{{listing.id}}">
-                {{listing.name}}
-            </div><br>
+                nosaukums: {{listing.name}}<br>
+                datums: {{listing.date}}<br>
+                cena: {{listing.price}}
+            </div><hr width="30%"><br>
         {% endfor %}
     {% endif %}
 
@@ -224,8 +226,10 @@
         <h3>Izsoles kas gaida</h3>
         {% for listing in waitingListings %}
             <div id="listing{{listing.id}}">
-                {{listing.name}}
-            </div><br>
+                nosaukums: {{listing.name}}<br>
+                datums: {{listing.date}}<br>
+                cena: {{listing.price}}
+            </div><hr width="30%"><br>
         {% endfor %}
     {% endif %}
 
@@ -233,8 +237,10 @@
     <h3>Beigušās izsoles</h3>
         {% for listing in endedListings %}
             <div id="listing{{listing.id}}">
-                {{listing.name}}
-            </div><br>
+                nosaukums: {{listing.name}}<br>
+                datums: {{listing.date}}<br>
+                cena: {{listing.price}}
+            </div><hr width="30%"><br>
         {% endfor %}
     {% endif %}
 
